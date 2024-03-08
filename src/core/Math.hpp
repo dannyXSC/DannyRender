@@ -1,7 +1,5 @@
 #ifndef __DANNY__CORE__MATH__
 #define __DANNY__CORE__MATH__
-#include <core/forward_decl.h>
-
 #include <geometry/SphericalCoordination.hpp>
 
 #include <glm/vec3.hpp>

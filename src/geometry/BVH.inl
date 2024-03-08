@@ -233,20 +233,20 @@ namespace danny
             std::array<BVHNode *, 32> stack;
             int stack_size = 0;
             stack[stack_size++] = m_root.get();
-            auto inv_dir = 1.0f / ray.get_direction();
+            auto inv_dir = 1.0f / ray.direction;
 
             auto min_distance = max_distance;
             while (stack_size)
             {
                 auto top = stack[--stack_size];
 
-                auto result = top->bbox.intersect(ray.get_origin(), inv_dir);
+                auto result = top->bbox.intersect(ray.origin, inv_dir);
                 if (result.x > 0.0f && result.y < min_distance)
                 {
                     if (top->left)
                     {
                         // Process first the node whose bbox_min is closer to the ray.
-                        auto len = glm::dot(top->left->bbox.get_min() - top->right->bbox.get_min(), ray.get_direction());
+                        auto len = glm::dot(top->left->bbox.get_min() - top->right->bbox.get_min(), ray.direction);
                         stack[stack_size++] = len > 0.0f ? top->left.get() : top->right.get();
                         stack[stack_size++] = len > 0.0f ? top->right.get() : top->left.get();
                     }
@@ -282,13 +282,13 @@ namespace danny
             std::array<BVHNode *, 32> stack;
             int stack_size = 0;
             stack[stack_size++] = m_root.get();
-            auto inv_dir = 1.0f / ray.get_direction();
+            auto inv_dir = 1.0f / ray.direction;
 
             while (stack_size)
             {
                 auto top = stack[--stack_size];
 
-                auto result = top->bbox.intersect(ray.get_origin(), inv_dir);
+                auto result = top->bbox.intersect(ray.origin, inv_dir);
                 if (result.x > 0.0f && result.y < max_distance)
                 {
                     if (top->left)

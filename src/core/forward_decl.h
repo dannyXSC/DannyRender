@@ -8,10 +8,12 @@ namespace danny
         class Camera;
         class CoordinateSpace;
         class Discrete1DSampler;
+        class Image;
         class PinholeCamera;
         class RealSampler;
         class UniformSampler;
         class Scene;
+        class Timer;
     }
 
     namespace geometry
@@ -29,6 +31,11 @@ namespace danny
         struct SphericalCoordinate;
         class Transformation;
         class Triangle;
+    }
+
+    namespace integrator
+    {
+        class Integrator;
     }
 
     namespace light
