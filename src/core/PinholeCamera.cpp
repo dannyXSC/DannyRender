@@ -5,7 +5,7 @@ namespace danny
 {
     namespace core
     {
-        PinholeCamera::PinholeCamera(const glm::vec2 &resolution, float near_distance,
+        PinholeCamera::PinholeCamera(const glm::ivec2 &resolution, float near_distance,
                                      const glm::vec2 &fov_xy, const glm::vec3 &pos,
                                      const glm::vec3 &dir, const glm::vec3 &up)
             : m_camera_space(pos, -dir, up), m_resolution(resolution), m_near_distance(near_distance)

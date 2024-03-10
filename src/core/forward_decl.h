@@ -9,11 +9,13 @@ namespace danny
         class CoordinateSpace;
         class Discrete1DSampler;
         class Image;
+        class Output;
         class PinholeCamera;
         class RealSampler;
         class UniformSampler;
         class Scene;
         class Timer;
+        class Tonemapper;
     }
 
     namespace geometry
@@ -53,6 +55,12 @@ namespace danny
     namespace utils
     {
         class Parser;
+    }
+
+    namespace texture
+    {
+        class Texture;
+        class ConstantTexture;
     }
 }
 

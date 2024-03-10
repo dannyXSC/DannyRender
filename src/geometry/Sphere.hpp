@@ -14,7 +14,7 @@ namespace danny
 {
     namespace geometry
     {
-        class Sphere : Object
+        class Sphere : public Object
         {
         public:
             Sphere(const glm::vec3 &p, float r, std::shared_ptr<material::BsdfMaterial> m)

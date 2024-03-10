@@ -13,6 +13,8 @@ namespace danny
             void start();
             double getTime();
 
+            static int64_t nowTime();
+
         private:
             std::chrono::time_point<std::chrono::system_clock> m_start_time{std::chrono::system_clock::now()};
         };

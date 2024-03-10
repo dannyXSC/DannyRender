@@ -18,7 +18,7 @@ namespace danny
         class DiffuseArealight : public Light
         {
         public:
-            explicit DiffuseArealight(const glm::vec3 &flux, std::shared_ptr<geometry::Object> obj);
+            explicit DiffuseArealight(const glm::vec3 &flux, std::unique_ptr<geometry::Object> obj);
 
             // Photon castPhoton(core::UniformSampler &sampler) const override;
             LightSample sample(std::shared_ptr<core::UniformSampler> sampler, const geometry::Intersection &intersection) const override;

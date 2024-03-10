@@ -1,13 +1,14 @@
 #include "DiffuseArealight.h"
 
+#include <iostream>
 #include <glm/gtc/constants.hpp>
 
 namespace danny
 {
     namespace light
     {
-        DiffuseArealight::DiffuseArealight(const glm::vec3 &flux, std::shared_ptr<geometry::Object> obj)
-            : m_flux(flux), m_object(obj), m_le(m_flux * glm::one_over_pi<float>() / m_object->getSurfaceArea()), m_pdf(1.0f / m_object->getSurfaceArea())
+        DiffuseArealight::DiffuseArealight(const glm::vec3 &flux, std::unique_ptr<geometry::Object> obj)
+            : m_flux(flux), m_object(std::move(obj)), m_le(m_flux * glm::one_over_pi<float>() / m_object->getSurfaceArea()), m_pdf(1.0f / m_object->getSurfaceArea())
         {
         }
 
@@ -47,7 +48,9 @@ namespace danny
 
         glm::vec3 DiffuseArealight::getLe(const glm::vec3 &wi_world, const glm::vec3 &light_plane_normal, float distance) const
         {
-            return glm::dot(-wi_world, light_plane_normal) > 0.0f ? m_le : glm::vec3(0.0f);
+            // TODO:做了修改
+            // return glm::dot(-wi_world, light_plane_normal) > 0.0f ? m_le : glm::vec3(0.0f);
+            return glm::dot(-wi_world, light_plane_normal) > 0.0f ? m_flux : glm::vec3(0.0f);
         }
 
         float DiffuseArealight::getPdf(const glm::vec3 &wi_world, const glm::vec3 &light_plane_normal, float distance) const

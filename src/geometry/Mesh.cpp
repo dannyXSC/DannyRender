@@ -1,5 +1,7 @@
 #include "Mesh.hpp"
 
+#include <iostream>
+
 #include <utils/Parser.h>
 
 namespace danny

@@ -12,10 +12,10 @@ namespace danny
 {
     namespace core
     {
-        class PinholeCamera : Camera
+        class PinholeCamera : public Camera
         {
         public:
-            explicit PinholeCamera(const glm::vec2 &resolution,
+            explicit PinholeCamera(const glm::ivec2 &resolution,
                                    float near_distance,
                                    const glm::vec2 &fov_xy,
                                    const glm::vec3 &pos = glm::vec3(0., 0., 0.),
