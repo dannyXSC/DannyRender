@@ -41,6 +41,12 @@ int main()
     auto tallbox = std::make_unique<danny::geometry::Mesh>(
         "../asset/models/cornellbox/tallbox.obj",
         white_diffuse);
+    auto shortbox_metal_0 = std::make_unique<danny::geometry::Mesh>(
+        "../asset/models/cornellbox/shortbox.obj",
+        metal_0);
+    auto tallbox_metal_0 = std::make_unique<danny::geometry::Mesh>(
+        "../asset/models/cornellbox/tallbox.obj",
+        metal_0);
     auto left = std::make_unique<danny::geometry::Mesh>(
         "../asset/models/cornellbox/left.obj",
         red_diffuse);
@@ -83,13 +89,15 @@ int main()
     scene.addObject(std::move(floor));
     // scene.addObject(std::move(shortbox));
     // scene.addObject(std::move(tallbox));
+    // scene.addObject(std::move(shortbox_metal_0));
+    // scene.addObject(std::move(tallbox_metal_0));
     scene.addObject(std::move(left));
     scene.addObject(std::move(right));
-    scene.addObject(std::move(sphere_0));
+    scene.addObject(std::move(sphere_0_15));
 
     scene.buildBVH();
 
-    std::string other_info = "metal_0";
+    std::string other_info = "roughness不为0";
 
     std::ostringstream oss;
     oss << spp << "_" << other_info

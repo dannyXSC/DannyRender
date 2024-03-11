@@ -55,6 +55,7 @@ namespace danny
 
                                                     geometry::Ray ray = scene.camera->castRay(i, j, offset_x, offset_y);
                                                     auto color = estimatePixel(scene, ray, sampler);
+                                                    
                                                     output.set(i, j, output.get(i, j) + color / m_spp);
 
                                                     cur_ssp_c++;
@@ -78,7 +79,10 @@ namespace danny
             std::cout << std::endl;
         }
 
-        const glm::vec3 Pathtracer::estimatePixel(const core::Scene &scene, const geometry::Ray &ray, std::shared_ptr<core::UniformSampler> sampler)
+        const glm::vec3 Pathtracer::estimatePixel(const core::Scene &scene,
+                                                  const geometry::Ray &ray,
+                                                  std::shared_ptr<core::UniformSampler> sampler,
+                                                  bool light_explicitly_sampled)
         {
             geometry::Intersection inter_obj;
             scene.intersect(ray, inter_obj, std::numeric_limits<float>::max());
@@ -93,22 +97,21 @@ namespace danny
             auto iter = scene.object_to_light.find(inter_obj.object);
             if (iter != scene.object_to_light.end())
             {
-                // TODO: 判断多次对光源采样问题
-                return iter->second->getLe(ray.direction, inter_obj.plane.normal, inter_obj.distance);
+                // 如果已经采样过了，就不贡献能量了
+                if (!light_explicitly_sampled)
+                    return iter->second->getLe(ray.direction, inter_obj.plane.normal, inter_obj.distance);
+                else
+                    return glm::vec3(0);
             }
 
-            // 不是光源
+            // 定义击中点的切空间
             core::CoordinateSpace tangent_space(inter_obj.plane.point, inter_obj.plane.normal);
             auto wo_tangent = tangent_space.vectorToLocalSpace(-ray.direction);
 
-            // glm::vec3 p_o_deviation = (core::math::cosTheta(wo_tangent) > 0)
-            //                               ? inter_obj.plane.point + inter_obj.plane.normal * scene.secondary_ray_epsilon
-            //                               : inter_obj.plane.point - inter_obj.plane.normal * scene.secondary_ray_epsilon;
-
             // 对光源进行重要性采样
             glm::vec3 L_dir(0);
-            int size = scene.lights.size();
-            for (int i = 0; i < size; i++)
+            light_explicitly_sampled = false;
+            for (int i = 0; i < scene.lights.size(); i++)
             {
                 auto &light = scene.lights[i];
                 auto light_sample = light->sample(sampler, inter_obj);
@@ -117,25 +120,29 @@ namespace danny
 
                 // 光线原点向normal方向移动一下
                 // geometry::Ray ray_to_light(p_o_deviation, light_sample.wi_world);
+                auto wi_tangent = tangent_space.vectorToLocalSpace(light_sample.wi_world);
+                auto bsdf = inter_obj.bsdf_material->getBsdf(wi_tangent, wo_tangent, inter_obj);
 
                 if (!scene.intersectShadowRay(ray_to_light,
                                               light_sample.distance - 1.1f * scene.secondary_ray_epsilon))
                 {
                     // 与光源之间没有遮挡
-                    auto wi_tangent = tangent_space.vectorToLocalSpace(light_sample.wi_world);
-
-                    auto bsdf = inter_obj.bsdf_material->getBsdf(wi_tangent, wo_tangent, inter_obj);
                     auto le = light_sample.le;
                     auto cos = glm::abs(core::math::cosTheta(wi_tangent));
                     auto pdf = light_sample.pdf_w;
 
-                    L_dir = L_dir + le * bsdf * cos / pdf;
-                    // std::cout << "le: " << le.x << " " << le.y << " " << le.z << std::endl;
-                    // std::cout << "bsdf: " << bsdf.x << " " << bsdf.y << " " << bsdf.z << std::endl;
-                    // std::cout << "cos: " << cos << std::endl;
-                    // std::cout << "pdf: " << pdf << std::endl;
-                    // std::cout << "L_dir: " << L_dir.x << " " << L_dir.y << " " << L_dir.z << std::endl;
+                    auto f = le * bsdf * cos / pdf;
+                    // 判断是不是低概率打到的
+                    auto f_sum = f.x + f.y + f.z;
+                    if (f_sum > 0.f && !glm::isinf(f_sum))
+                    {
+                        L_dir = L_dir + f;
+                    }
                 }
+                // 若没有概率从这个方向射出去
+                // 就说明这束光所在的立体角，应该不需要被重要性采样
+                if (glm::l2Norm(bsdf) > 1e-5)
+                    light_explicitly_sampled = true;
             }
 
             // 俄罗斯轮盘赌
@@ -149,18 +156,17 @@ namespace danny
             glm::vec3 wi_world = tangent_space.vectorToWorldSpace(wi_tangent);
             wi_world = glm::normalize(wi_world);
 
+            // 轮盘赌
+            f = f / (1.f - m_cutoff_probability);
             geometry::Ray ray_to_next(inter_obj.plane.point + scene.secondary_ray_epsilon * wi_world, wi_world);
+            // 判断是不是光源，由light_explicitly_sampled 携带信息了
+            // 判断击中物体了没，由下一次迭代计算
+            f = f * estimatePixel(scene, ray_to_next, sampler, light_explicitly_sampled);
+            auto f_sum = f.x + f.y + f.z;
 
-            // geometry::Ray ray_to_next(p_o_deviation, wi_world);
-            geometry::Intersection inter_next;
-            scene.intersect(ray_to_next, inter_next, std::numeric_limits<float>::max());
-
-            if (inter_next.object &&
-                scene.object_to_light.find(inter_next.object) == scene.object_to_light.end())
+            if (f_sum > 0.f && !glm::isinf(f_sum))
             {
-                // 有物体，并且不是光源
-                f = f / (1.f - m_cutoff_probability);
-                L_indir = f * estimatePixel(scene, ray_to_next, sampler);
+                L_indir = f;
             }
 
             return L_dir + L_indir;
