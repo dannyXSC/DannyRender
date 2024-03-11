@@ -50,6 +50,8 @@ namespace danny
     namespace material
     {
         class BsdfMaterial;
+        class Metal;
+        class Diffuse;
     }
 
     namespace utils

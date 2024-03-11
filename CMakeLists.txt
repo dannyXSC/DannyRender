@@ -15,6 +15,7 @@ file(GLOB_RECURSE SOURCE_FILES  "src/main.cpp"
                                 "src/integrator/*.cpp" "src/integrator/*.hpp" "src/integrator/*.h"
                                 "src/light/*.cpp" "src/light/*.hpp" "src/light/*.h"
                                 "src/material/*.cpp" "src/material/*.hpp" "src/material/*.h"
+                                "src/microfacet/*.cpp" "src/microfacet/*.hpp" "src/microfacet/*.h"
                                 "src/texture/*.cpp" "src/texture/*.hpp" "src/texture/*.h"
                                 "src/utils/*.cpp" "src/utils/*.hpp" "src/utils/*.h")
 # set(SOURCE_FILES    "src/main.cpp")

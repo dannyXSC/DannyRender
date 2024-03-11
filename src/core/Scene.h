@@ -29,19 +29,19 @@ namespace danny
         public:
             explicit Scene(std::unique_ptr<integrator::Integrator> integrator,
                            std::unique_ptr<Camera> camera,
-                           const glm::vec3 &background_radiance = glm::vec3(0., 0., 0.),
-                           float secondary_ray_epsilon = 1e-4f);
+                           float secondary_ray_epsilon = 1e-4f,
+                           const glm::vec3 &background_radiance = glm::vec3(0., 0., 0.));
             explicit Scene(std::unique_ptr<integrator::Integrator> integrator,
                            std::unique_ptr<Camera> camera,
                            std::vector<std::unique_ptr<geometry::Object>> &obj_list,
                            std::vector<std::unique_ptr<light::Light>> &light_list,
-                           const glm::vec3 &background_radiance = glm::vec3(0., 0., 0.),
-                           float secondary_ray_epsilon = 1e-4f);
+                           float secondary_ray_epsilon = 1e-4f,
+                           const glm::vec3 &background_radiance = glm::vec3(0., 0., 0.));
 
             geometry::BBox getBBox() const;
             bool intersect(const geometry::Ray &ray, geometry::Intersection &intersection, float max_distance) const;
             bool intersectShadowRay(const geometry::Ray &ray, float max_distance) const;
-            void render();
+            void render(const std::string &root_path = "../result/", const std::string &name = ".png");
             glm::vec3 getBackgroundRadiance(const glm::vec3 &direction, bool light_explicitly_sampled) const;
 
             void addObject(std::unique_ptr<geometry::Object> obj);

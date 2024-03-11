@@ -14,6 +14,8 @@
 #include <core/Math.hpp>
 #include <utils/Global.hpp>
 
+#include <omp.h>
+
 namespace danny
 {
     namespace integrator
@@ -99,6 +101,10 @@ namespace danny
             core::CoordinateSpace tangent_space(inter_obj.plane.point, inter_obj.plane.normal);
             auto wo_tangent = tangent_space.vectorToLocalSpace(-ray.direction);
 
+            // glm::vec3 p_o_deviation = (core::math::cosTheta(wo_tangent) > 0)
+            //                               ? inter_obj.plane.point + inter_obj.plane.normal * scene.secondary_ray_epsilon
+            //                               : inter_obj.plane.point - inter_obj.plane.normal * scene.secondary_ray_epsilon;
+
             // 对光源进行重要性采样
             glm::vec3 L_dir(0);
             int size = scene.lights.size();
@@ -107,7 +113,10 @@ namespace danny
                 auto &light = scene.lights[i];
                 auto light_sample = light->sample(sampler, inter_obj);
 
-                geometry::Ray ray_to_light(inter_obj.plane.point, light_sample.wi_world);
+                geometry::Ray ray_to_light(inter_obj.plane.point + scene.secondary_ray_epsilon * light_sample.wi_world, light_sample.wi_world);
+
+                // 光线原点向normal方向移动一下
+                // geometry::Ray ray_to_light(p_o_deviation, light_sample.wi_world);
 
                 if (!scene.intersectShadowRay(ray_to_light,
                                               light_sample.distance - 1.1f * scene.secondary_ray_epsilon))
@@ -137,10 +146,12 @@ namespace danny
             // Indirect 采样
             glm::vec3 L_indir(0);
             auto [wi_tangent, f] = inter_obj.bsdf_material->sampleWi(wo_tangent, sampler, inter_obj);
-            f = f / (1.f - m_cutoff_probability);
             glm::vec3 wi_world = tangent_space.vectorToWorldSpace(wi_tangent);
+            wi_world = glm::normalize(wi_world);
 
             geometry::Ray ray_to_next(inter_obj.plane.point + scene.secondary_ray_epsilon * wi_world, wi_world);
+
+            // geometry::Ray ray_to_next(p_o_deviation, wi_world);
             geometry::Intersection inter_next;
             scene.intersect(ray_to_next, inter_next, std::numeric_limits<float>::max());
 
@@ -148,7 +159,7 @@ namespace danny
                 scene.object_to_light.find(inter_next.object) == scene.object_to_light.end())
             {
                 // 有物体，并且不是光源
-
+                f = f / (1.f - m_cutoff_probability);
                 L_indir = f * estimatePixel(scene, ray_to_next, sampler);
             }
 
