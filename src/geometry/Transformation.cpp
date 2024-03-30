@@ -9,8 +9,15 @@ namespace danny
     namespace geometry
     {
 
-        Transformation::Transformation(Transformation::Info &info)
+        Transformation::Transformation(const Transformation::Info &info)
             : m_transformation(glm::orientate4(glm::radians(glm::vec3(info.rotation.x, info.rotation.z, info.rotation.y))) * glm::scale(info.scaling)),
+              m_inverse_transformation(glm::inverse(m_transformation)),
+              m_translation(info.translation)
+        {
+        }
+
+        Transformation::Transformation(const Transformation::QuatInfo &info)
+            : m_transformation(glm::mat4_cast(glm::angleAxis(glm::radians(info.rotation.w), glm::normalize(glm::vec3(info.rotation)))) * glm::scale(info.scaling)),
               m_inverse_transformation(glm::inverse(m_transformation)),
               m_translation(info.translation)
         {

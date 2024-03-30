@@ -72,6 +72,18 @@ namespace danny
                 return v0 + t * (v1 - v0);
             }
 
+            // 其作用是计算给定输入值 x 在指定的标准差 deviation 下的高斯分布概率密度值。
+            inline float normalizedGaussian(float deviation, float x)
+            {
+                return glm::exp(-x * x / (2.0f * deviation * deviation)) / (glm::sqrt(2 * glm::pi<float>() * deviation * deviation));
+            }
+
+            // 其作用是计算给定输入值 x 在指定的标准差 deviation 下的单位高度(unit height guassian)高斯分布概率密度值。
+            inline float unitHeightGaussian(float deviation, float x)
+            {
+                return glm::exp(-x * x / (2.0f * deviation * deviation));
+            }
+
             // Following trigonometric functions assumes the parameters are given in tangent space.
             // This results in efficient computations.
             inline float cosTheta(const glm::vec3 &w_tangent)

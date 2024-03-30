@@ -42,7 +42,8 @@ namespace danny
                                                       tex_vertices[1], tex_vertices[2]));
                 }
 
-                bvh->buildWithSAHSplit();
+                // TODO: error
+                bvh->buildWithMedianSplit();
             }
 
             return path_to_bvh[path];

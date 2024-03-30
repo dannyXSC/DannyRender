@@ -24,8 +24,17 @@ namespace danny
                 glm::vec3 translation{0., 0., 0.};
             };
 
+            struct QuatInfo
+            {
+                glm::vec3 scaling{1., 1., 1.};
+                // quaternion to represent rotation {x , y , z , theta}
+                glm::vec4 rotation{0., 0., 0., 0.};
+                glm::vec3 translation{0., 0., 0.};
+            };
+
         public:
-            explicit Transformation(Transformation::Info &info);
+            explicit Transformation(const Transformation::Info &info);
+            explicit Transformation(const Transformation::QuatInfo &info);
 
             glm::vec3 vectorToObjectSpace(const glm::vec3 &vector) const;
             glm::vec3 vectorToWorldSpace(const glm::vec3 &vector) const;

@@ -18,7 +18,6 @@ file(GLOB_RECURSE SOURCE_FILES  "src/main.cpp"
                                 "src/microfacet/*.cpp" "src/microfacet/*.hpp" "src/microfacet/*.h"
                                 "src/texture/*.cpp" "src/texture/*.hpp" "src/texture/*.h"
                                 "src/utils/*.cpp" "src/utils/*.hpp" "src/utils/*.h")
-# set(SOURCE_FILES    "src/main.cpp")
 
 add_executable(DannyRender ${SOURCE_FILES})
 

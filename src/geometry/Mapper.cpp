@@ -17,7 +17,7 @@ namespace danny
             // 修改
             // auto dp = glm::transpose(glm::inverse(glm::transpose(glm::mat2(m_uv0 - m_uv2, m_uv1 - m_uv2))) * glm::transpose(glm::mat2x3(-edge2, edge1 - edge2)));
             auto dp = glm::mat2x3(-edge2, edge1 - edge2) * glm::inverse(glm::mat2(m_uv0 - m_uv2, m_uv1 - m_uv2));
-            // 两个坐标轴
+            // 两个uv坐标轴在世界坐标系下的方向向量（都垂直于n）
             // 可能需要正交化
             m_dpdu = dp[0];
             m_dpdv = dp[1];

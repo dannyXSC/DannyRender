@@ -52,6 +52,13 @@ namespace danny
         class BsdfMaterial;
         class Metal;
         class Diffuse;
+        class Cloth;
+        struct ClothPara;
+    }
+
+    namespace microfacet
+    {
+        class MicrocylinderCloth;
     }
 
     namespace utils
