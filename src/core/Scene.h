@@ -29,10 +29,12 @@ namespace danny
         public:
             explicit Scene(std::unique_ptr<integrator::Integrator> integrator,
                            std::unique_ptr<Camera> camera,
+                           std::vector<std::unique_ptr<Output>> outputs,
                            float secondary_ray_epsilon = 1e-4f,
                            const glm::vec3 &background_radiance = glm::vec3(0., 0., 0.));
             explicit Scene(std::unique_ptr<integrator::Integrator> integrator,
                            std::unique_ptr<Camera> camera,
+                           std::vector<std::unique_ptr<Output>> outputs,
                            std::vector<std::unique_ptr<geometry::Object>> &obj_list,
                            std::vector<std::unique_ptr<light::Light>> &light_list,
                            float secondary_ray_epsilon = 1e-4f,
@@ -41,7 +43,7 @@ namespace danny
             geometry::BBox getBBox() const;
             bool intersect(const geometry::Ray &ray, geometry::Intersection &intersection, float max_distance) const;
             bool intersectShadowRay(const geometry::Ray &ray, float max_distance) const;
-            void render(const std::string &root_path = "../result/", const std::string &name = ".png");
+            void render();
             glm::vec3 getBackgroundRadiance(const glm::vec3 &direction, bool light_explicitly_sampled) const;
 
             void addObject(std::unique_ptr<geometry::Object> obj);
@@ -54,7 +56,7 @@ namespace danny
             geometry::BVH<std::shared_ptr<geometry::Object>> m_bvh;
             std::unique_ptr<integrator::Integrator> m_integrator;
             std::unique_ptr<Image> m_image;
-            // std::vector<std::unique_ptr<Output>> m_outputs;
+            std::vector<std::unique_ptr<Output>> m_outputs;
         };
     }
 }

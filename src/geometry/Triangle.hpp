@@ -23,6 +23,9 @@ namespace danny
         public:
             Triangle(const glm::vec3 &v0, const glm::vec3 &edge1, const glm::vec3 &edge2,
                      const glm::vec2 &uv0, const glm::vec2 &uv1, const glm::vec2 &uv2);
+            Triangle(const glm::vec3 &v0, const glm::vec3 &edge1, const glm::vec3 &edge2,
+                     const glm::vec2 &uv0, const glm::vec2 &uv1, const glm::vec2 &uv2,
+                     const glm::vec3 &n0, const glm::vec3 &n1, const glm::vec3 &n2);
 
             geometry::Plane samplePlane(std::shared_ptr<core::UniformSampler> sampler) const;
             float getSurfaceArea() const;
@@ -39,7 +42,7 @@ namespace danny
             glm::vec3 m_edge1;
             // 0 -> 1
             glm::vec3 m_edge2;
-            glm::vec3 m_normal;
+            glm::vec3 m_normal0, m_normal1, m_normal2;
             std::unique_ptr<Mapper> m_mapper;
         };
     }

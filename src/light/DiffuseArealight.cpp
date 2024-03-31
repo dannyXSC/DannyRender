@@ -49,8 +49,8 @@ namespace danny
         glm::vec3 DiffuseArealight::getLe(const glm::vec3 &wi_world, const glm::vec3 &light_plane_normal, float distance) const
         {
             // TODO:做了修改
-            // return glm::dot(-wi_world, light_plane_normal) > 0.0f ? m_le : glm::vec3(0.0f);
-            return glm::dot(-wi_world, light_plane_normal) > 0.0f ? m_flux : glm::vec3(0.0f);
+            return glm::dot(-wi_world, light_plane_normal) > 0.0f ? m_le : glm::vec3(0.0f);
+            // return glm::dot(-wi_world, light_plane_normal) > 0.0f ? m_flux : glm::vec3(0.0f);
         }
 
         float DiffuseArealight::getPdf(const glm::vec3 &wi_world, const glm::vec3 &light_plane_normal, float distance) const

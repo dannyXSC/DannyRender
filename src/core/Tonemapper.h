@@ -27,6 +27,21 @@ namespace danny
             float m_min;
             float m_max;
         };
+
+        // From Reinhard et al., 2002.
+        class GlobalReinhard : public Tonemapper
+        {
+        public:
+            explicit GlobalReinhard(float key, float max_luminance);
+
+            Image tonemap(const Image &image) const override;
+
+        private:
+            //(maximum luminance of the scene) * max_luminance will be represented as 1.0.
+            // e.g. 0.5 means half of (maximum luminance of the scene) will be mapped to 1.0 and the rest will be burnt out.
+            float m_key;
+            float m_max_luminance;
+        };
     }
 }
 #endif

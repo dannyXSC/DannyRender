@@ -208,6 +208,7 @@ namespace objl
 
         // Material
         std::optional<Material> MeshMaterial;
+        bool noNormal = true;
     };
 
     // Namespace: Math
@@ -442,6 +443,7 @@ namespace objl
 
             std::vector<Vertex> Vertices;
             std::vector<unsigned int> Indices;
+            bool noNormal = true;
 
             std::vector<std::string> MeshMatNames;
 
@@ -570,7 +572,7 @@ namespace objl
                 {
                     // Generate the vertices
                     std::vector<Vertex> vVerts;
-                    GenVerticesFromRawOBJ(vVerts, Positions, TCoords, Normals, curline);
+                    noNormal = GenVerticesFromRawOBJ(vVerts, Positions, TCoords, Normals, curline);
 
                     // Add Vertices
                     for (int i = 0; i < int(vVerts.size()); i++)
@@ -670,6 +672,7 @@ namespace objl
                 // Create Mesh
                 tempMesh = Mesh(Vertices, Indices);
                 tempMesh.MeshName = meshname;
+                tempMesh.noNormal = noNormal;
 
                 // Insert Mesh
                 LoadedMeshes.push_back(tempMesh);
@@ -716,7 +719,7 @@ namespace objl
     private:
         // Generate vertices from a list of positions,
         //	tcoords, normals and a face line
-        void GenVerticesFromRawOBJ(std::vector<Vertex> &oVerts,
+        bool GenVerticesFromRawOBJ(std::vector<Vertex> &oVerts,
                                    const std::vector<Vector3> &iPositions,
                                    const std::vector<Vector2> &iTCoords,
                                    const std::vector<Vector3> &iNormals,
@@ -822,6 +825,7 @@ namespace objl
                     oVerts[i].Normal = normal;
                 }
             }
+            return noNormal;
         }
 
         // Triangulate a list of vertices into a face by printing

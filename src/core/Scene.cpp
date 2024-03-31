@@ -13,6 +13,7 @@ namespace danny
     {
         Scene::Scene(std::unique_ptr<integrator::Integrator> integrator,
                      std::unique_ptr<Camera> camera,
+                     std::vector<std::unique_ptr<Output>> outputs,
                      float secondary_ray_epsilon,
                      const glm::vec3 &background_radiance)
         {
@@ -23,15 +24,17 @@ namespace danny
             // not consider output for a moment
             this->camera = std::move(camera);
             this->m_image = std::make_unique<Image>(this->camera->get_resolution().x, this->camera->get_resolution().y);
+            m_outputs = outputs;
         }
 
         Scene::Scene(std::unique_ptr<integrator::Integrator> integrator,
                      std::unique_ptr<Camera> camera,
+                     std::vector<std::unique_ptr<Output>> outputs,
                      std::vector<std::unique_ptr<geometry::Object>> &obj_list,
                      std::vector<std::unique_ptr<light::Light>> &light_list,
                      float secondary_ray_epsilon,
                      const glm::vec3 &background_radiance)
-            : Scene(std::move(integrator), std::move(camera), secondary_ray_epsilon, background_radiance)
+            : Scene(std::move(integrator), std::move(camera), outputs, secondary_ray_epsilon, background_radiance)
         {
             for (auto &obj : obj_list)
                 addObject(std::move(obj));
@@ -105,7 +108,7 @@ namespace danny
             return m_bvh.intersectShadowRay(ray, max_distance);
         }
 
-        void Scene::render(const std::string &root_path, const std::string &name)
+        void Scene::render()
         {
             // assert that bvh has been build
             assert(m_bvh_flag == true);
@@ -115,10 +118,10 @@ namespace danny
             m_integrator->integrate(*this, *m_image);
             std::cout << "Render time: " << timer.getTime() << std::endl;
 
-            // not use output here
-            // just save it
-            Ldr output(root_path, std::make_unique<Clamp>(0., 1.));
-            output.save(*m_image, name);
+            for (auto &output : m_outputs)
+            {
+                output->save(*m_image);
+            }
         }
 
         glm::vec3 Scene::getBackgroundRadiance(const glm::vec3 &direction, bool light_explicitly_sampled) const

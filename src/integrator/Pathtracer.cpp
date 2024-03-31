@@ -107,8 +107,8 @@ namespace danny
             // 定义击中点的切空间
             core::CoordinateSpace tangent_space(inter_obj.plane.point, inter_obj.plane.normal);
             auto wo_tangent = tangent_space.vectorToLocalSpace(-ray.direction);
-            inter_obj.dpdu_local = tangent_space.vectorToLocalSpace(inter_obj.dpdu);
-            inter_obj.dpdv_local = tangent_space.vectorToLocalSpace(inter_obj.dpdv);
+            inter_obj.dpdu_local = tangent_space.vectorToLocalSpace(glm::normalize(inter_obj.dpdu));
+            inter_obj.dpdv_local = tangent_space.vectorToLocalSpace(glm::normalize(inter_obj.dpdv));
 
             // 对光源进行重要性采样
             glm::vec3 L_dir(0);

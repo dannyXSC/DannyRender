@@ -14,12 +14,10 @@ namespace danny
         {
         }
 
-        void Ldr::save(const Image &image, const std::string &name) const
+        void Ldr::save(const Image &image) const
         {
             std::ostringstream oss;
-            oss << m_path << Timer::nowTime() << "_" << name;
-            std::cout << oss.str() << std::endl;
-            m_tonemapper->tonemap(image).saveLdr(oss.str());
+            m_tonemapper->tonemap(image).saveLdr(m_path);
         }
     }
 }

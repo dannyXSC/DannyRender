@@ -13,7 +13,7 @@ namespace danny
     namespace microfacet
     {
         MicrocylinderCloth::MicrocylinderCloth(const danny::material::ClothPara &para)
-            : albedo(para.albedo), gamma_s(para.gamma_s), gamma_v(para.gamma_v), k_d(para.k_d), eta(para.eta)
+            : albedo(para.albedo), gamma_s(glm::radians(para.gamma_s)), gamma_v(glm::radians(para.gamma_v)), k_d(para.k_d), eta(para.eta)
         {
         }
 
@@ -76,17 +76,14 @@ namespace danny
             float thetaI = glm::asin(sinThetaI);
             float sinThetaO = glm::clamp(glm::dot(wo, u), -1.0f, 1.0f);
             float thetaO = glm::asin(sinThetaO);
+            float theta_h = (thetaI + thetaO) * 0.5;
+            float theta_d = (thetaI - thetaO) * 0.5;
 
             glm::vec3 wi_on_normal = glm::normalize(wi - u * sinThetaI);
             glm::vec3 wo_on_normal = glm::normalize(wo - u * sinThetaO);
 
             float cosPhiD = glm::clamp(glm::dot(wi_on_normal, wo_on_normal), -1.0f, 1.0f);
-
             float phi_d = glm::acos(cosPhiD);
-            float theta_h = (thetaI + thetaO) * 0.5;
-            float theta_d = (thetaI - thetaO) * 0.5;
-
-            float cosThetaO = glm::cos(thetaO);
 
             glm::vec3 wi_on_tangent_normal = glm::normalize(wi - v * glm::dot(wi, v));
             glm::vec3 wo_on_tangent_normal = glm::normalize(wo - v * glm::dot(wo, v));
@@ -100,12 +97,12 @@ namespace danny
             gp.cosThetaI = glm::cos(thetaI);
             gp.cosThetaO = glm::cos(thetaO);
 
-            gp.cosPhiI = glm::abs(glm::dot(n, wi_on_normal));
-            gp.cosPhiO = glm::abs(glm::dot(n, wo_on_normal));
+            gp.cosPhiI = glm::dot(n, wi_on_normal);
+            gp.cosPhiO = glm::dot(n, wo_on_normal);
             gp.phi_d = phi_d;
 
-            gp.cosPsiI = glm::abs(glm::dot(n, wi_on_tangent_normal));
-            gp.cosPsiO = glm::abs(glm::dot(n, wo_on_tangent_normal));
+            gp.cosPsiI = glm::dot(n, wi_on_tangent_normal);
+            gp.cosPsiO = glm::dot(n, wo_on_tangent_normal);
             gp.psi_d = psi_d;
 
             return gp;

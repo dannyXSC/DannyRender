@@ -13,7 +13,7 @@ namespace danny
         public:
             virtual ~Output() = default;
 
-            virtual void save(const Image &image, const std::string &name = "") const = 0;
+            virtual void save(const Image &image) const = 0;
         };
 
         class Ldr : public Output
@@ -22,7 +22,7 @@ namespace danny
             explicit Ldr(const std::string &path,
                          std::unique_ptr<Tonemapper> tonemapper);
 
-            void save(const Image &image, const std::string &name = "") const override;
+            void save(const Image &image) const override;
 
         private:
             std::string m_path;

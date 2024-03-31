@@ -1,6 +1,9 @@
 #include "Parser.h"
 
 #include <OBJ_Loader.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
+#include "glm/gtx/string_cast.hpp"
+#include <iostream>
 
 namespace danny
 {
@@ -22,6 +25,7 @@ namespace danny
 
                 std::array<glm::vec3, 3> face_vertices;
                 std::array<glm::vec2, 3> tex_vertices;
+                std::array<glm::vec3, 3> n_vertices;
 
                 for (int i = 0; i < mesh.Vertices.size(); i += 3)
                 {
@@ -35,11 +39,26 @@ namespace danny
                         auto tex = glm::vec2(mesh.Vertices[i + j].TextureCoordinate.X,
                                              mesh.Vertices[i + j].TextureCoordinate.Y);
                         tex_vertices[j] = tex;
+
+                        auto n = glm::vec3(mesh.Vertices[i + j].Normal.X,
+                                           mesh.Vertices[i + j].Normal.Y,
+                                           mesh.Vertices[i + j].Normal.Z);
+                        n_vertices[j] = n;
                     }
 
-                    bvh->addObject(geometry::Triangle(face_vertices[0], face_vertices[1] - face_vertices[0],
-                                                      face_vertices[2] - face_vertices[0], tex_vertices[0],
-                                                      tex_vertices[1], tex_vertices[2]));
+                    if (mesh.noNormal)
+                    {
+                        bvh->addObject(geometry::Triangle(face_vertices[0], face_vertices[1] - face_vertices[0],
+                                                          face_vertices[2] - face_vertices[0], tex_vertices[0],
+                                                          tex_vertices[1], tex_vertices[2]));
+                    }
+                    else
+                    {
+                        bvh->addObject(geometry::Triangle(face_vertices[0], face_vertices[1] - face_vertices[0],
+                                                          face_vertices[2] - face_vertices[0], tex_vertices[0],
+                                                          tex_vertices[1], tex_vertices[2],
+                                                          n_vertices[0], n_vertices[1], n_vertices[2]));
+                    }
                 }
 
                 // TODO: error
