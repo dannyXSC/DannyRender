@@ -29,12 +29,12 @@ namespace danny
         public:
             explicit Scene(std::unique_ptr<integrator::Integrator> integrator,
                            std::unique_ptr<Camera> camera,
-                           std::vector<std::unique_ptr<Output>> outputs,
+                           std::vector<std::unique_ptr<Output>> &outputs,
                            float secondary_ray_epsilon = 1e-4f,
                            const glm::vec3 &background_radiance = glm::vec3(0., 0., 0.));
             explicit Scene(std::unique_ptr<integrator::Integrator> integrator,
                            std::unique_ptr<Camera> camera,
-                           std::vector<std::unique_ptr<Output>> outputs,
+                           std::vector<std::unique_ptr<Output>> &outputs,
                            std::vector<std::unique_ptr<geometry::Object>> &obj_list,
                            std::vector<std::unique_ptr<light::Light>> &light_list,
                            float secondary_ray_epsilon = 1e-4f,

@@ -175,7 +175,7 @@ void generateScene1(const danny::material::ClothPara &cloth_para1, const danny::
     auto metal_0 = std::make_shared<danny::material::Metal>(roughness_0, 4.);
 
     auto cloth_obj = std::make_unique<danny::geometry::Mesh>(
-        "../asset/models/cloth/Jacobi-n128-w400-texture.obj",
+        "../asset/models/cloth/000026.obj",
         cloth_material);
 
     auto floor = std::make_unique<danny::geometry::Mesh>(
@@ -228,7 +228,7 @@ void generateScene1(const danny::material::ClothPara &cloth_para1, const danny::
                                                                pos,
                                                                dir,
                                                                up);
-    int spp = 1024;
+    int spp = 16;
     float cutoff_rate = 0.2f;
     int thread_num = 16;
     auto integrator = std::make_unique<danny::integrator::Pathtracer>(spp, cutoff_rate, thread_num);
@@ -380,7 +380,7 @@ void generateSceneCloth(const std::string &obj_path,
                                                                   std::move(light_obj));
     auto sphere_0_15 = std::make_unique<danny::geometry::Sphere>(glm::vec3(250, 100, 200), 100, metal_0_15);
 
-    auto resolution = glm::ivec2(783, 784);
+    auto resolution = glm::ivec2(512, 512);
     float near_distance = 10.f;
     auto fov = glm::vec2(40);
     auto pos = glm::vec3(278, 278, -800);
@@ -415,14 +415,16 @@ void generateSceneCloth(const std::string &obj_path,
     scene.render();
 }
 
-int main()
+void runGenerateCloth()
 {
-    std::string obj_save_path = "/share/test/scxie/cloth_simulater";
-    std::vector<std::string> sub_name = {"GSSimulator-n128-w400-texture",
-                                         "JacobiSimulator-n128-w400-texture",
-                                         "CGSimulator-n128-w400-texture"};
+    // std::string obj_save_path = "/share/test/scxie/cloth_simulater";
+    // std::vector<std::string> sub_name = {"GSSimulator-n128-w400-texture",
+    //                                      "JacobiSimulator-n128-w400-texture",
+    //                                      "CGSimulator-n128-w400-texture"};
+    std::string obj_save_path = "/mnt/e/数据/cloth_simulator";
+    std::vector<std::string> sub_name = {"JacobiSimulator-n128-w400-texture"};
 
-    std::string image_save_path = "/share/test/scxie/cloth_render";
+    std::string image_save_path = "/mnt/e/数据/cloth_render";
     fs::create_directory(image_save_path);
 
     std::vector<danny::material::ClothPara> paras1, paras2;
@@ -470,7 +472,7 @@ int main()
             auto cloth_dir = cloth_oss.str();
             fs::create_directory(cloth_dir);
 
-            for (int i = 0; i < 200; i++)
+            for (int i = 20; i < 140; i++)
             {
                 std::ostringstream oss;
                 oss << obj_save_path << "/"
@@ -480,16 +482,23 @@ int main()
                 auto obj_path = oss.str();
 
                 std::ostringstream cur_oss;
-                cur_oss << cloth_dir
+                cur_oss << cloth_dir << "/"
                         << std::setw(6) << std::setfill('0') << i
                         << ".png";
                 auto save_path = cur_oss.str();
 
                 std::cout << std::endl
-                          << save_path << " finish" << std::endl;
+                          << save_path << " start" << std::endl;
 
                 generateSceneCloth(obj_path, save_path, paras1[j], paras2[j]);
             }
         }
     }
+}
+
+int main()
+{
+    // auto [cloth1, cloth2] = getCloth1();
+    // generateScene1(cloth1, cloth2, "../result/cache/test.png");
+    runGenerateCloth();
 }

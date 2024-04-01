@@ -118,7 +118,12 @@ namespace danny
                 auto &light = scene.lights[i];
                 auto light_sample = light->sample(sampler, inter_obj);
 
-                geometry::Ray ray_to_light(inter_obj.plane.point + scene.secondary_ray_epsilon * light_sample.wi_world, light_sample.wi_world);
+                auto ray_dot_n = glm::dot(ray.direction, inter_obj.plane.normal);
+                auto offset = (ray_dot_n > 0
+                                   ? -inter_obj.plane.normal * scene.secondary_ray_epsilon
+                                   : inter_obj.plane.normal * scene.secondary_ray_epsilon);
+                // geometry::Ray ray_to_light(inter_obj.plane.point + scene.secondary_ray_epsilon * light_sample.wi_world, light_sample.wi_world);
+                geometry::Ray ray_to_light(inter_obj.plane.point + offset, light_sample.wi_world);
 
                 // 光线原点向normal方向移动一下
                 // geometry::Ray ray_to_light(p_o_deviation, light_sample.wi_world);
@@ -126,7 +131,12 @@ namespace danny
                 auto bsdf = inter_obj.bsdf_material->getBsdf(wi_tangent, wo_tangent, inter_obj);
 
                 if (!scene.intersectShadowRay(ray_to_light,
-                                              light_sample.distance - 1.1f * scene.secondary_ray_epsilon))
+                                              light_sample.distance +
+                                                  5.f *
+                                                      scene.secondary_ray_epsilon *
+                                                      (ray_dot_n * glm::dot(light_sample.wi_world, inter_obj.plane.normal) > 0
+                                                           ? 1
+                                                           : -1)))
                 {
                     // 与光源之间没有遮挡
                     auto le = light_sample.le;

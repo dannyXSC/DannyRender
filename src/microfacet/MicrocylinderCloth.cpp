@@ -94,15 +94,16 @@ namespace danny
             GeometryPara gp;
             gp.theta_d = theta_d;
             gp.theta_h = theta_h;
-            gp.cosThetaI = glm::cos(thetaI);
-            gp.cosThetaO = glm::cos(thetaO);
+            gp.cosThetaI = glm::abs(glm::cos(thetaI));
+            gp.cosThetaO = glm::abs(glm::cos(thetaO));
 
-            gp.cosPhiI = glm::dot(n, wi_on_normal);
-            gp.cosPhiO = glm::dot(n, wo_on_normal);
+            gp.cosPhiI = glm::abs(glm::dot(n, wi_on_normal));
+            gp.cosPhiO = glm::abs(glm::dot(n, wo_on_normal));
             gp.phi_d = phi_d;
 
-            gp.cosPsiI = glm::dot(n, wi_on_tangent_normal);
-            gp.cosPsiO = glm::dot(n, wo_on_tangent_normal);
+            // two side rendering
+            gp.cosPsiI = glm::abs(glm::dot(n, wi_on_tangent_normal));
+            gp.cosPsiO = glm::abs(glm::dot(n, wo_on_tangent_normal));
             gp.psi_d = psi_d;
 
             return gp;

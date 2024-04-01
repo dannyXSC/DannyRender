@@ -13,7 +13,7 @@ namespace danny
     {
         Scene::Scene(std::unique_ptr<integrator::Integrator> integrator,
                      std::unique_ptr<Camera> camera,
-                     std::vector<std::unique_ptr<Output>> outputs,
+                     std::vector<std::unique_ptr<Output>> &outputs,
                      float secondary_ray_epsilon,
                      const glm::vec3 &background_radiance)
         {
@@ -24,12 +24,15 @@ namespace danny
             // not consider output for a moment
             this->camera = std::move(camera);
             this->m_image = std::make_unique<Image>(this->camera->get_resolution().x, this->camera->get_resolution().y);
-            m_outputs = outputs;
+            for (auto &output : outputs)
+            {
+                m_outputs.push_back(std::move(output));
+            }
         }
 
         Scene::Scene(std::unique_ptr<integrator::Integrator> integrator,
                      std::unique_ptr<Camera> camera,
-                     std::vector<std::unique_ptr<Output>> outputs,
+                     std::vector<std::unique_ptr<Output>> &outputs,
                      std::vector<std::unique_ptr<geometry::Object>> &obj_list,
                      std::vector<std::unique_ptr<light::Light>> &light_list,
                      float secondary_ray_epsilon,

@@ -31,6 +31,14 @@ namespace danny
                 wi_tangent = core::math::sampleHemisphereUniform(sampler->sample(), sampler->sample()).toCartesianCoordinate();
                 f = getBsdf(wi_tangent, wo_tangent, intersection) / getPdf(wi_tangent, wo_tangent, intersection);
             }
+            else
+            {
+                wi_tangent = core::math::sampleHemisphereUniform(sampler->sample(), sampler->sample()).toCartesianCoordinate();
+                auto wo_tangent_tmp = wo_tangent;
+                wo_tangent_tmp.z = -wo_tangent_tmp.z;
+                f = getBsdf(wi_tangent, wo_tangent_tmp, intersection) / getPdf(wi_tangent, wo_tangent_tmp, intersection);
+                wi_tangent.z = -wi_tangent.z;
+            }
 
             return std::make_pair(wi_tangent, f);
         }
@@ -91,12 +99,20 @@ namespace danny
 
             Q += (1 - cloth_para1.alpha - cloth_para2.alpha) * glm::dot(wo_tangent, n_tangent);
 
-            return (cloth_para1.alpha * u_value + cloth_para2.alpha * v_value) / Q;
+            auto bsdf = cloth_para1.alpha * u_value + cloth_para2.alpha * v_value;
+
+            if (Q > 0)
+            {
+                bsdf = bsdf / Q;
+            }
+
+            return bsdf;
         }
 
         float Cloth::getPdf(const glm::vec3 &wi_tangent, const glm::vec3 &wo_tangent, const geometry::Intersection &intersection) const
         {
-            if (core::math::cosTheta(wi_tangent) > 0.f && core::math::cosTheta(wo_tangent) > 0.0f)
+            if ((core::math::cosTheta(wi_tangent) > 0.f && core::math::cosTheta(wo_tangent) > 0.0f) ||
+                (core::math::cosTheta(wi_tangent) < 0.f && core::math::cosTheta(wo_tangent) < 0.0f))
             {
                 // uniform 1/(2*pi)
                 return 0.5 * glm ::one_over_pi<float>();
