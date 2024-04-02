@@ -151,6 +151,103 @@ std::pair<danny::material::ClothPara, danny::material::ClothPara> getCloth6()
     return std::make_pair(cloth_para1, cloth_para2);
 }
 
+void generateScene(const std::string &name)
+{
+    auto red = std::make_shared<danny::texture::ConstantTexture>(glm::vec3(0.63f, 0.065f, 0.05f));
+    auto green = std::make_shared<danny::texture::ConstantTexture>(glm::vec3(0.14f, 0.45f, 0.091f));
+    auto white = std::make_shared<danny::texture::ConstantTexture>(glm::vec3(0.725f, 0.71f, 0.68f));
+    auto blue = std::make_shared<danny::texture::ConstantTexture>(glm::vec3(0.14f, 0.05f, 0.45f));
+    auto test = std::make_shared<danny::texture::ConstantTexture>(glm::vec3(0.14f, 0.05f, 0.45f));
+    auto interval = std::make_shared<danny::texture::IntervalTexture>();
+
+    auto red_diffuse = std::make_shared<danny::material::Diffuse>(red);
+    auto green_diffuse = std::make_shared<danny::material::Diffuse>(green);
+    auto white_diffuse = std::make_shared<danny::material::Diffuse>(white);
+    auto blue_diffuse = std::make_shared<danny::material::Diffuse>(blue);
+    auto interval_diffuse = std::make_shared<danny::material::Diffuse>(interval);
+    auto test_material = std::make_shared<danny::material::Diffuse>(test);
+
+    auto roughness_0_15 = std::make_shared<danny::texture::ConstantTexture>(glm::vec3(0.15, 0, 0));
+    auto metal_0_15 = std::make_shared<danny::material::Metal>(roughness_0_15, 4.);
+
+    auto roughness_0 = std::make_shared<danny::texture::ConstantTexture>(glm::vec3(0., 0, 0));
+    auto metal_0 = std::make_shared<danny::material::Metal>(roughness_0, 4.);
+
+    auto floor = std::make_unique<danny::geometry::Mesh>(
+        "../asset/models/cornellbox/floor.obj",
+        white_diffuse);
+    auto shortbox = std::make_unique<danny::geometry::Mesh>(
+        "../asset/models/cornellbox/shortbox.obj",
+        white_diffuse);
+    auto tallbox = std::make_unique<danny::geometry::Mesh>(
+        "../asset/models/cornellbox/tallbox.obj",
+        white_diffuse);
+    auto shortbox_metal_0 = std::make_unique<danny::geometry::Mesh>(
+        "../asset/models/cornellbox/shortbox.obj",
+        metal_0);
+    auto tallbox_metal_0 = std::make_unique<danny::geometry::Mesh>(
+        "../asset/models/cornellbox/tallbox.obj",
+        metal_0);
+    auto left = std::make_unique<danny::geometry::Mesh>(
+        "../asset/models/cornellbox/left.obj",
+        red_diffuse);
+    auto right = std::make_unique<danny::geometry::Mesh>(
+        "../asset/models/cornellbox/right.obj",
+        green_diffuse);
+
+    auto light_obj = std::make_unique<danny::geometry::Mesh>(
+        "../asset/models/cornellbox/light.obj",
+        nullptr);
+
+    auto light = std::make_unique<danny::light::DiffuseArealight>(glm::vec3(500000, 500000, 500000),
+                                                                  std::move(light_obj));
+    auto sphere_0_15 = std::make_unique<danny::geometry::Sphere>(glm::vec3(250, 100, 200), 100, metal_0_15);
+    auto sphere_0 = std::make_unique<danny::geometry::Sphere>(glm::vec3(150, 100, 200), 100, metal_0);
+    auto sphere_interval = std::make_unique<danny::geometry::Sphere>(glm::vec3(150, 100, 200), 100, interval_diffuse);
+    auto sphere_test = std::make_unique<danny::geometry::Sphere>(glm::vec3(150, 100, 200), 100, test_material);
+
+    auto resolution = glm::ivec2(783, 784);
+    float near_distance = 10.f;
+    auto fov = glm::vec2(40);
+    auto pos = glm::vec3(278, 278, -800);
+    auto dir = glm::vec3(0, 0, 1);
+    auto up = glm::vec3(0, 1, 0);
+    auto camera = std::make_unique<danny::core::PinholeCamera>(resolution,
+                                                               near_distance,
+                                                               fov,
+                                                               pos,
+                                                               dir,
+                                                               up);
+    int spp = 1024;
+    float cutoff_rate = 0.2f;
+    int thread_num = 16;
+    auto integrator = std::make_unique<danny::integrator::Pathtracer>(spp, cutoff_rate, thread_num);
+
+    std::vector<std::unique_ptr<danny::core::Output>> outputs;
+    outputs.emplace_back(std::make_unique<danny::core::Ldr>(name, std::make_unique<danny::core::GlobalReinhard>(0.18, 1.0)));
+    // danny::core::Ldr output(root_path, std::make_unique<danny::core::Clamp>(0.f, 1.0f));
+
+    float secondary_ray_epsilon = 0.01;
+    danny::core::Scene scene(std::move(integrator), std::move(camera), outputs, secondary_ray_epsilon);
+
+    scene.addLight(std::move(light));
+    scene.addObject(std::move(floor));
+    // scene.addObject(std::move(shortbox));
+    // scene.addObject(std::move(tallbox));
+    // scene.addObject(std::move(shortbox_metal_0));
+    // scene.addObject(std::move(tallbox_metal_0));
+    scene.addObject(std::move(left));
+    scene.addObject(std::move(right));
+    scene.addObject(std::move(sphere_0_15));
+    // scene.addObject(std::move(sphere_interval));
+    // scene.addObject(std::move(sphere_cloth));
+    // scene.addObject(std::move(sphere_test));
+
+    scene.buildBVH();
+
+    scene.render();
+}
+
 void generateScene1(const danny::material::ClothPara &cloth_para1, const danny::material::ClothPara &cloth_para2, const std::string &name)
 {
     auto red = std::make_shared<danny::texture::ConstantTexture>(glm::vec3(0.63f, 0.065f, 0.05f));
@@ -498,7 +595,8 @@ void generateSceneCloth(const std::string &obj_path,
 
 int main()
 {
-    auto [cloth1, cloth2] = getCloth1();
-    generateScene1(cloth1, cloth2, "./test.png");
+    generateScene("./test.png");
+    // auto [cloth1, cloth2] = getCloth1();
+    // generateScene1(cloth1, cloth2, "./test.png");
     // runGenerateCloth();
 }
