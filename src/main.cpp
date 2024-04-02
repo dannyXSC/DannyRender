@@ -415,90 +415,90 @@ void generateSceneCloth(const std::string &obj_path,
     scene.render();
 }
 
-void runGenerateCloth()
-{
-    // std::string obj_save_path = "/share/test/scxie/cloth_simulater";
-    // std::vector<std::string> sub_name = {"GSSimulator-n128-w400-texture",
-    //                                      "JacobiSimulator-n128-w400-texture",
-    //                                      "CGSimulator-n128-w400-texture"};
-    std::string obj_save_path = "/mnt/e/数据/cloth_simulator";
-    std::vector<std::string> sub_name = {"JacobiSimulator-n128-w400-texture"};
+// void runGenerateCloth()
+// {
+//     // std::string obj_save_path = "/share/test/scxie/cloth_simulater";
+//     // std::vector<std::string> sub_name = {"GSSimulator-n128-w400-texture",
+//     //                                      "JacobiSimulator-n128-w400-texture",
+//     //                                      "CGSimulator-n128-w400-texture"};
+//     std::string obj_save_path = "/mnt/e/数据/cloth_simulator";
+//     std::vector<std::string> sub_name = {"JacobiSimulator-n128-w400-texture"};
 
-    std::string image_save_path = "/mnt/e/数据/cloth_render";
-    fs::create_directory(image_save_path);
+//     std::string image_save_path = "/mnt/e/数据/cloth_render";
+//     fs::create_directory(image_save_path);
 
-    std::vector<danny::material::ClothPara> paras1, paras2;
+//     std::vector<danny::material::ClothPara> paras1, paras2;
 
-    {
-        auto [para1, para2] = getCloth1();
-        paras1.push_back(para1);
-        paras2.push_back(para2);
-    }
-    {
-        auto [para1, para2] = getCloth2();
-        paras1.push_back(para1);
-        paras2.push_back(para2);
-    }
-    {
-        auto [para1, para2] = getCloth3();
-        paras1.push_back(para1);
-        paras2.push_back(para2);
-    }
-    {
-        auto [para1, para2] = getCloth4();
-        paras1.push_back(para1);
-        paras2.push_back(para2);
-    }
-    {
-        auto [para1, para2] = getCloth5();
-        paras1.push_back(para1);
-        paras2.push_back(para2);
-    }
-    {
-        auto [para1, para2] = getCloth6();
-        paras1.push_back(para1);
-        paras2.push_back(para2);
-    }
+//     {
+//         auto [para1, para2] = getCloth1();
+//         paras1.push_back(para1);
+//         paras2.push_back(para2);
+//     }
+//     {
+//         auto [para1, para2] = getCloth2();
+//         paras1.push_back(para1);
+//         paras2.push_back(para2);
+//     }
+//     {
+//         auto [para1, para2] = getCloth3();
+//         paras1.push_back(para1);
+//         paras2.push_back(para2);
+//     }
+//     {
+//         auto [para1, para2] = getCloth4();
+//         paras1.push_back(para1);
+//         paras2.push_back(para2);
+//     }
+//     {
+//         auto [para1, para2] = getCloth5();
+//         paras1.push_back(para1);
+//         paras2.push_back(para2);
+//     }
+//     {
+//         auto [para1, para2] = getCloth6();
+//         paras1.push_back(para1);
+//         paras2.push_back(para2);
+//     }
 
-    for (auto sub_dir : sub_name)
-    {
-        auto image_sub = image_save_path + "/" + sub_dir;
-        fs::create_directory(image_sub);
+//     for (auto sub_dir : sub_name)
+//     {
+//         auto image_sub = image_save_path + "/" + sub_dir;
+//         fs::create_directory(image_sub);
 
-        for (int j = 0; j < 6; j++)
-        {
-            std::ostringstream cloth_oss;
-            cloth_oss << image_sub << "/Cloth" << j;
-            auto cloth_dir = cloth_oss.str();
-            fs::create_directory(cloth_dir);
+//         for (int j = 0; j < 6; j++)
+//         {
+//             std::ostringstream cloth_oss;
+//             cloth_oss << image_sub << "/Cloth" << j;
+//             auto cloth_dir = cloth_oss.str();
+//             fs::create_directory(cloth_dir);
 
-            for (int i = 20; i < 140; i++)
-            {
-                std::ostringstream oss;
-                oss << obj_save_path << "/"
-                    << sub_dir << "/"
-                    << "mesh/"
-                    << std::setw(6) << std::setfill('0') << i << ".obj";
-                auto obj_path = oss.str();
+//             for (int i = 20; i < 140; i++)
+//             {
+//                 std::ostringstream oss;
+//                 oss << obj_save_path << "/"
+//                     << sub_dir << "/"
+//                     << "mesh/"
+//                     << std::setw(6) << std::setfill('0') << i << ".obj";
+//                 auto obj_path = oss.str();
 
-                std::ostringstream cur_oss;
-                cur_oss << cloth_dir << "/"
-                        << std::setw(6) << std::setfill('0') << i
-                        << ".png";
-                auto save_path = cur_oss.str();
+//                 std::ostringstream cur_oss;
+//                 cur_oss << cloth_dir << "/"
+//                         << std::setw(6) << std::setfill('0') << i
+//                         << ".png";
+//                 auto save_path = cur_oss.str();
 
-                std::cout << std::endl
-                          << save_path << " start" << std::endl;
+//                 std::cout << std::endl
+//                           << save_path << " start" << std::endl;
 
-                generateSceneCloth(obj_path, save_path, paras1[j], paras2[j]);
-            }
-        }
-    }
-}
+//                 generateSceneCloth(obj_path, save_path, paras1[j], paras2[j]);
+//             }
+//         }
+//     }
+// }
 
 int main()
 {
-    // auto [cloth1, cloth2] = getCloth1();
-    // generateScene1(cloth1, cloth2, "../result/cache/test.png");
-    runGenerateCloth();
+    auto [cloth1, cloth2] = getCloth1();
+    generateScene1(cloth1, cloth2, "./test.png");
+    // runGenerateCloth();
 }

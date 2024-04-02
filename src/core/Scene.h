@@ -6,7 +6,7 @@
 #include <unordered_map>
 
 #include <core/Camera.h>
-#include <light/light.h>
+#include <light/Light.h>
 #include <geometry/BVH.h>
 #include <integrator/Integrator.h>
 #include <core/Image.h>
