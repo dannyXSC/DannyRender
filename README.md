@@ -4,6 +4,8 @@
 
 ## result
 
+> spp 1024
+
 - diffuse
 
 <img src="./asset/result/漫反射物体.png" style="zoom:25%;" />
@@ -14,7 +16,7 @@
 
 - metal
 
-<img src="./asset/result/16_roughness不为0.png" style="zoom:25%;" />
+<img src="./asset/result/test.png" style="zoom:25%;" />
 
 - specular
 
