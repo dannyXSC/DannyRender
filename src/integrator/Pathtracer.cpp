@@ -30,8 +30,8 @@ namespace danny
             return std::make_unique<Pathtracer>(*this);
         }
 
-        Pathtracer::Pathtracer(int spp, float cutoff_probability, int thread_num)
-            : m_spp(spp), m_cutoff_probability(cutoff_probability), m_thread_num(thread_num), m_progress(0) {}
+        Pathtracer::Pathtracer(int spp, float cutoff_probability)
+            : m_spp(spp), m_cutoff_probability(cutoff_probability), m_progress(0) {}
 
         void Pathtracer::integrate(const core::Scene &scene, core::Image &output)
         {

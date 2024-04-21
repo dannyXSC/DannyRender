@@ -63,5 +63,26 @@ namespace danny
                 throwError(child_name + " of " + value() + " is not specified.");
             }
         }
+
+        template <typename T>
+        void Node::parseChildText(const std::string &child_name, std::vector<T> &v) const
+        {
+            std::stringstream stream;
+            auto child = this->child(child_name);
+            if (child)
+            {
+                auto text = child.text();
+                if (text)
+                {
+                    stream << text << std::endl;
+                }
+            }
+
+            T arg;
+            while (stream >> arg)
+            {
+                v.push_back(arg);
+            }
+        }
     }
 }

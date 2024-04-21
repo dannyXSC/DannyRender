@@ -6,6 +6,7 @@
 #include <sstream>
 #include <memory>
 #include <unordered_map>
+#include <vector>
 
 namespace danny
 {
@@ -26,6 +27,9 @@ namespace danny
             // Parses child text and assigns them to given arguments.
             template <typename... Args>
             void parseChildText(const std::string &child_name, Args... args) const;
+
+            template <typename T>
+            void parseChildText(const std::string &child_name, std::vector<T> &v) const;
 
             // Loads the XML file and returns the root of it.
             static Node getRoot(const std::string &xml_filepath);

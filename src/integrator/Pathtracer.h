@@ -35,14 +35,13 @@ namespace danny
 
         public:
             explicit Pathtracer(const Pathtracer::Xml &xml) : Pathtracer(xml.sample_count, xml.cutoff_probability){};
-            explicit Pathtracer(int spp = 16, float cutoff_probability = 0.2, int thread_num = 6);
+            explicit Pathtracer(int spp = 16, float cutoff_probability = 0.2);
 
             void integrate(const core::Scene &scene, core::Image &output) override;
 
         private:
             int m_spp;
             float m_cutoff_probability;
-            int m_thread_num;
             std::mutex m_mtx;
             int m_progress;
 

@@ -1,0 +1,93 @@
+<Scene>
+    <SecondaryRayEpsilon>0.1</SecondaryRayEpsilon>
+    <Integrator type="Pathtracer">
+        <SampleCount>1024</SampleCount>
+        <CutoffProbability>0.5</CutoffProbability>
+    </Integrator>
+
+    <Output type="Ldr">
+        <Path>../result/cache/cloth5-1024</Path>
+        <Format>png</Format>
+        <Tonemapper type="GlobalReinhard">
+            <Key>0.18</Key>
+            <MaxLuminance>1.0</MaxLuminance>
+        </Tonemapper>
+    </Output>
+
+    <Camera type="Pinhole">
+        <Position>278 273 -800</Position>
+        <Direction>0 0 1</Direction>
+        <Up>0 1 0</Up>
+        <FovXY>39.3077 39.3077</FovXY>
+        <Resolution>783 784</Resolution>
+        <NearDistance>10</NearDistance>
+    </Camera>
+
+    <Object type="Mesh">
+        <Datapath>../asset/models/cornellbox/floor.obj</Datapath>
+        <BsdfMaterial type="Diffuse">
+            <Kd textureType="Constant">
+                <Value>0.708 0.721 0.758</Value>
+            </Kd>
+        </BsdfMaterial>
+    </Object>
+
+    <Object type="Mesh">
+        <Datapath>../asset/models/cornellbox/right.obj</Datapath>
+        <BsdfMaterial type="Diffuse">
+            <Kd textureType="Constant">
+                <Value>0.115 0.476 0.098</Value>
+            </Kd>
+        </BsdfMaterial>
+    </Object>
+
+    <Object type="Mesh">
+        <Datapath>../asset/models/cornellbox/left.obj</Datapath>
+        <BsdfMaterial type="Diffuse">
+            <Kd textureType="Constant">
+                <Value>0.651 0.055 0.057</Value>
+            </Kd>
+        </BsdfMaterial>
+    </Object>
+
+    <Object type="Mesh">
+        <Datapath>../asset/models/cloth/CG160.obj</Datapath>
+        <BsdfMaterial type="Cloth">
+            <Albedo1>0.1 1 0.4</Albedo1>
+            <CoefficientAlbedo1>0.2</CoefficientAlbedo1>
+            <GammaS1>4</GammaS1>
+            <GammaV1>8</GammaV1>
+            <KD1> 0.1</KD1>
+            <Eta1>1.345</Eta1>
+            <Alpha1>0.86</Alpha1>
+            <TangentOffsets1>-25 -25 25 25</TangentOffsets1>
+
+            <Albedo2>1 0 0.1</Albedo2>
+            <CoefficientAlbedo2>0.6</CoefficientAlbedo2>
+            <GammaS2>5</GammaS2>
+            <GammaV2>10</GammaV2>
+            <KD2>0.1</KD2>
+            <Eta2>1.345</Eta2>
+            <Alpha2>0.14</Alpha2>
+            <TangentOffsets2>0 0</TangentOffsets2>
+        </BsdfMaterial>
+    </Object>
+
+    <Object type="Sphere">
+        <Radius>100</Radius>
+        <Center>250 100 200</Center>
+        <BsdfMaterial type="Diffuse">
+            <Kd textureType="Constant">
+                <Value>0.708 0.721 0.745</Value>
+            </Kd>
+        </BsdfMaterial>
+    </Object>
+
+    <Light type="DiffuseArealight">
+        <Flux>500000 500000 500000</Flux>
+        <Object type="Mesh">
+            <Datapath>../asset/models/cornellbox/light.obj</Datapath>
+        </Object>
+    </Light>
+
+</Scene>

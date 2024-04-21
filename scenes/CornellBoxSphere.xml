@@ -1,27 +1,12 @@
 <Scene>
 	<SecondaryRayEpsilon>0.1</SecondaryRayEpsilon>
 	<Integrator type="Pathtracer">
-		<!-- <Filter type="Gaussian">
-			<Sigma>0.5</Sigma>
-		</Filter> -->
 		<SampleCount>128</SampleCount>
 		<CutoffProbability>0.5</CutoffProbability>
-		<!-- <PhotonsPerPass>300000</PhotonsPerPass> -->
-		<!-- <RRThreshold>0.2</RRThreshold> -->
-		<!-- <Alpha>0.5</Alpha> -->
 	</Integrator>
 
-	<!-- <Output type="Ldr">
-		<Path>../result/cache/cbox-clamp-128-metal0</Path>
-		<Format>png</Format>
-		<Tonemapper type="Clamp">
-			<Min>0.0</Min>
-			<Max>1.0</Max>
-		</Tonemapper>
-	</Output> -->
-
 	<Output type="Ldr">
-		<Path>../result/cache/cbox-1.0-128-metal02</Path>
+		<Path>../result/cache/cornell_box_sphere_metal_mirror-128</Path>
 		<Format>png</Format>
 		<Tonemapper type="GlobalReinhard">
 			<Key>0.18</Key>
@@ -71,36 +56,15 @@
 		<BsdfMaterial type="Metal">
 			<Ior>1.5</Ior>
 			<Roughness textureType="Constant">
-				<Value>0.2 0 0</Value>
+				<Value>0 0 0</Value>
 			</Roughness>
 		</BsdfMaterial>
 	</Object>
-	<!-- 
-	<Object type="Mesh">
-		<Datapath>../asset/models/cornellbox/shortbox.obj</Datapath>
-		<BsdfMaterial type="Diffuse">
-			<Kd textureType="Constant">
-				<Value>0.708 0.721 0.745</Value>
-			</Kd>
-		</BsdfMaterial>
-	</Object>
-
-	<Object type="Mesh">
-		<Datapath>../asset/models/cornellbox/tallbox.obj</Datapath>
-		<BsdfMaterial type="Diffuse">
-			<Kd textureType="Constant">
-				<Value>0.708 0.721 0.745</Value>
-			</Kd>
-		</BsdfMaterial>
-	</Object> -->
 
 	<Light type="DiffuseArealight">
 		<Flux>500000 500000 500000</Flux>
 		<Object type="Mesh">
 			<Datapath>../asset/models/cornellbox/light.obj</Datapath>
-			<!-- <Transformation>
-				<Translation>0.0 -0.5 0.0</Translation>
-			</Transformation> -->
 		</Object>
 	</Light>
 

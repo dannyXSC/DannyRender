@@ -65,8 +65,8 @@ namespace danny
                 }
 
                 // TODO: error
-                // bvh->buildWithMedianSplit();
-                bvh->buildWithSAHSplit();
+                bvh->buildWithMedianSplit();
+                // bvh->buildWithSAHSplit();
             }
 
             return path_to_bvh[path];

@@ -12,15 +12,33 @@ namespace danny
 {
     namespace material
     {
-        // Cloth::Xml::Xml(const xml::Node &node)
-        // {
-        //     node.parseChildText("Albedo1", &cloth_para1.albedo.x, &cloth_para1.albedo.y, &cloth_para1.albedo.z);
-        // }
+        Cloth::Xml::Xml(const xml::Node &node)
+        {
+            node.parseChildText("Albedo1", &cloth_para1.albedo.x, &cloth_para1.albedo.y, &cloth_para1.albedo.z);
+            node.parseChildText("CoefficientAlbedo1", &coefficient_albedo1, 1.0f);
+            node.parseChildText("GammaS1", &cloth_para1.gamma_s);
+            node.parseChildText("GammaV1", &cloth_para1.gamma_v);
+            node.parseChildText("KD1", &cloth_para1.k_d);
+            node.parseChildText("Eta1", &cloth_para1.eta);
+            node.parseChildText("Alpha1", &cloth_para1.alpha);
+            node.parseChildText("TangentOffsets1", cloth_para1.tangent_offsets);
+            cloth_para1.albedo *= coefficient_albedo1;
 
-        // std::unique_ptr<BsdfMaterial> Cloth::Xml::create() const
-        // {
-        //     return std::make_unique<Cloth>(*this);
-        // }
+            node.parseChildText("Albedo2", &cloth_para2.albedo.x, &cloth_para2.albedo.y, &cloth_para2.albedo.z);
+            node.parseChildText("CoefficientAlbedo2", &coefficient_albedo2, 1.0f);
+            node.parseChildText("GammaS2", &cloth_para2.gamma_s);
+            node.parseChildText("GammaV2", &cloth_para2.gamma_v);
+            node.parseChildText("KD2", &cloth_para2.k_d);
+            node.parseChildText("Eta2", &cloth_para2.eta);
+            node.parseChildText("Alpha2", &cloth_para2.alpha);
+            node.parseChildText("TangentOffsets2", cloth_para2.tangent_offsets);
+            cloth_para2.albedo *= coefficient_albedo2;
+        }
+
+        std::unique_ptr<BsdfMaterial> Cloth::Xml::create() const
+        {
+            return std::make_unique<Cloth>(*this);
+        }
 
         Cloth::Cloth(const ClothPara &cloth_para1, const ClothPara &cloth_para2)
             : cloth_para1(cloth_para1), cloth_para2(cloth_para2),

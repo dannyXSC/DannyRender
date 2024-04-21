@@ -18,24 +18,24 @@ namespace danny
             float k_d;
             float eta;
             float alpha;
-            // len(tangent_offsets) == sample_num
             std::vector<float> tangent_offsets;
         };
         class Cloth : public BsdfMaterial
         {
-            // public:
-            //     // Xml structure of the class.
-            //     struct Xml : public BsdfMaterial::Xml
-            //     {
-            //         ClothPara cloth_para1, cloth_para2;
+        public:
+            // Xml structure of the class.
+            struct Xml : public BsdfMaterial::Xml
+            {
+                ClothPara cloth_para1, cloth_para2;
+                float coefficient_albedo1, coefficient_albedo2;
 
-            //         explicit Xml(const xml::Node &node);
-            //         std::unique_ptr<BsdfMaterial> create() const override;
-            //     };
+                explicit Xml(const xml::Node &node);
+                std::unique_ptr<BsdfMaterial> create() const override;
+            };
 
         public:
-            // explicit Cloth(const Cloth::Xml &xml)
-            //     : Cloth(xml.cloth_para1, xml.cloth_para2){};
+            explicit Cloth(const Cloth::Xml &xml)
+                : Cloth(xml.cloth_para1, xml.cloth_para2){};
             explicit Cloth(const ClothPara &cloth_para1, const ClothPara &cloth_para2);
 
             // pair.first is sampled wi
