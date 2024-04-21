@@ -5,13 +5,18 @@
 #include <geometry/Triangle.hpp>
 
 #include <memory>
+#include <unordered_set>
 
 namespace danny
 {
-    namespace utils
+    namespace xml
     {
         class Parser
         {
+        public:
+            static const std::unordered_set<std::string> gSupportedFormatsLoad;
+            static const std::unordered_set<std::string> gSupportedFormatsSave;
+
         public:
             static std::shared_ptr<geometry::BVH<geometry::Triangle>> loadModel(const std::string &path);
         };

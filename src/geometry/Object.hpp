@@ -2,10 +2,12 @@
 #define __DANNY__GEOMETRY__OBJECT__
 #include <core/forward_decl.h>
 
+#include <xml/Node.h>
 #include <geometry/Ray.hpp>
 #include <geometry/Plane.hpp>
 #include <geometry/BBox.hpp>
 
+#include <unordered_map>
 #include <glm/vec2.hpp>
 #include <memory>
 
@@ -15,6 +17,17 @@ namespace danny
     {
         class Object
         {
+        public:
+            // Xml structure of the class.
+            struct Xml
+            {
+                std::unordered_map<std::string, std::string> attributes;
+
+                virtual ~Xml() = default;
+                virtual std::unique_ptr<Object> create() const = 0;
+                static std::unique_ptr<Object::Xml> factory(const xml::Node &node);
+            };
+
         public:
             virtual ~Object() = default;
             virtual Plane sample(std::shared_ptr<core::UniformSampler> sampler) const = 0;

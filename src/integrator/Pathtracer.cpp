@@ -1,13 +1,10 @@
 #include "Pathtracer.h"
 
-#include <iostream>
-#include <thread>
-#include <mutex>
-
 #define GLM_ENABLE_EXPERIMENTAL
 
 #include <glm/ext.hpp>
 
+#include <integrator/Integrator.h>
 #include <geometry/Intersection.hpp>
 #include <core/CoordinateSpace.h>
 #include <light/Light.h>
@@ -20,63 +17,70 @@ namespace danny
 {
     namespace integrator
     {
+        Pathtracer::Xml::Xml(const xml::Node &node)
+        {
+            // filter = core::Filter::Xml::factory(node.child("Filter", true));
+            node.parseChildText("SampleCount", &sample_count);
+            node.parseChildText("CutoffProbability", &cutoff_probability, 0.5f);
+            // node.parseChildText("RRThreshold", &rr_threshold);
+        }
+
+        std::unique_ptr<Integrator> Pathtracer::Xml::create() const
+        {
+            return std::make_unique<Pathtracer>(*this);
+        }
+
         Pathtracer::Pathtracer(int spp, float cutoff_probability, int thread_num)
-            : m_spp(spp), m_cutoff_probability(cutoff_probability), m_thread_num(thread_num) {}
+            : m_spp(spp), m_cutoff_probability(cutoff_probability), m_thread_num(thread_num), m_progress(0) {}
 
         void Pathtracer::integrate(const core::Scene &scene, core::Image &output)
         {
-            int width = output.get_width(), height = output.get_height();
+            auto resolution = scene.camera->get_resolution();
+            int x, y;
 
-            std::thread t[m_thread_num];
-            std::mutex mtx;
-            int progress = 0;
-
-            int height_per_thread = height / m_thread_num;
-            int spp_per = (int)std::sqrt(m_spp);
-            float width_per_spp = 1.0 / spp_per;
-
-            for (int t_n = 0; t_n < m_thread_num; t_n++)
+#pragma omp parallel num_threads(std::thread::hardware_concurrency())
             {
-                t[t_n] = std::thread([&](int h_start, int h_end)
-                                     {
-                                        std::shared_ptr<core::UniformSampler> sampler = std::make_shared<core::UniformSampler>();
-
-                                        for (uint32_t j = h_start; j < h_end; ++j)
-                                        {
-                                            for (uint32_t i = 0; i < width; ++i)
-                                            {
-                                                int cur_ssp_r = 0, cur_ssp_c = 0;
-                                                for (int k = 0; k < m_spp; k++)
-                                                {
-                                                    // generate primary ray direction
-                                                    // MSAA
-                                                    float offset_x = width_per_spp / 2+ cur_ssp_c * width_per_spp;
-                                                    float offset_y = width_per_spp / 2 + cur_ssp_r * width_per_spp;
-
-                                                    geometry::Ray ray = scene.camera->castRay(i, j, offset_x, offset_y);
-                                                    auto color = estimatePixel(scene, ray, sampler);
-                                                    
-                                                    output.set(i, j, output.get(i, j) + color / m_spp);
-
-                                                    cur_ssp_c++;
-                                                    cur_ssp_r = (cur_ssp_r + cur_ssp_c / spp_per) % spp_per;
-                                                    cur_ssp_c = cur_ssp_c % spp_per;
-                                                }
-                                            }
-                                            mtx.lock();
-                                            progress += 1;
-                                            utils::UpdateProgress(1.0f * progress / height);
-                                            mtx.unlock();
-                                        } },
-                                     t_n * height_per_thread, (t_n + 1) * height_per_thread);
+#pragma omp for schedule(dynamic) collapse(2)
+                for (x = 0; x < resolution.x; x += cPTPatchSize)
+                {
+                    for (y = 0; y < resolution.y; y += cPTPatchSize)
+                    {
+                        integratePatch(scene, output, x, y, omp_get_thread_num());
+                    }
+                }
             }
-            for (int t_n = 0; t_n < m_thread_num; t_n++)
-            {
-                t[t_n].join();
-            }
-
-            utils::UpdateProgress(1.f);
+            utils::UpdateProgress(1.0f);
             std::cout << std::endl;
+        }
+
+        void Pathtracer::integratePatch(const core::Scene &scene, core::Image &output, int x, int y, int id)
+        {
+            auto resolution = scene.camera->get_resolution();
+            auto bound_x = glm::min(cPTPatchSize, resolution.x - x);
+            auto bound_y = glm::min(cPTPatchSize, resolution.y - y);
+
+            std::shared_ptr<core::UniformSampler> sampler = std::make_shared<core::UniformSampler>();
+            float weight = 1.0f / m_spp;
+            int total_task = resolution.x * resolution.y;
+            for (int i = 0; i < bound_x; ++i)
+            {
+                for (int j = 0; j < bound_y; ++j)
+                {
+                    glm::vec3 result(0.0);
+                    for (int k = 0; k < m_spp; ++k)
+                    {
+                        geometry::Ray ray = scene.camera->castRay(x + i, y + j, sampler->sample(), sampler->sample());
+
+                        auto color = estimatePixel(scene, ray, sampler);
+                        result += color * weight;
+                    }
+                    output.set(x + i, y + j, result);
+                }
+                m_mtx.lock();
+                m_progress += bound_y;
+                utils::UpdateProgress(1.0f * m_progress / total_task);
+                m_mtx.unlock();
+            }
         }
 
         const glm::vec3 Pathtracer::estimatePixel(const core::Scene &scene,
@@ -130,6 +134,8 @@ namespace danny
                 auto wi_tangent = tangent_space.vectorToLocalSpace(light_sample.wi_world);
                 auto bsdf = inter_obj.bsdf_material->getBsdf(wi_tangent, wo_tangent, inter_obj);
 
+                light_explicitly_sampled = true;
+
                 if (!scene.intersectShadowRay(ray_to_light,
                                               light_sample.distance +
                                                   5.f *
@@ -150,11 +156,11 @@ namespace danny
                     {
                         L_dir = L_dir + f;
                     }
+                    // 若没有概率从这个方向射出去
+                    // 就说明这束光所在的立体角，应该不需要被重要性采样
+                    if (glm::l2Norm(bsdf) < 1e-5)
+                        light_explicitly_sampled = false;
                 }
-                // 若没有概率从这个方向射出去
-                // 就说明这束光所在的立体角，应该不需要被重要性采样
-                if (glm::l2Norm(bsdf) > 1e-5)
-                    light_explicitly_sampled = true;
             }
 
             // 俄罗斯轮盘赌

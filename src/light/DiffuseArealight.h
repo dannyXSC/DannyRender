@@ -18,6 +18,19 @@ namespace danny
         class DiffuseArealight : public Light
         {
         public:
+            // Xml structure of the class.
+            struct Xml : public Light::Xml
+            {
+                glm::vec3 flux;
+                std::unique_ptr<geometry::Object::Xml> object;
+
+                explicit Xml(const xml::Node &node);
+                std::unique_ptr<Light> create() const override;
+            };
+
+        public:
+            explicit DiffuseArealight(const DiffuseArealight::Xml &xml)
+                : DiffuseArealight(xml.flux, xml.object->create()){};
             explicit DiffuseArealight(const glm::vec3 &flux, std::unique_ptr<geometry::Object> obj);
 
             // Photon castPhoton(core::UniformSampler &sampler) const override;

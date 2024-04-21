@@ -14,6 +14,18 @@ namespace danny
         class Diffuse : public BsdfMaterial
         {
         public:
+            // Xml structure of the class.
+            struct Xml : public BsdfMaterial::Xml
+            {
+                std::unique_ptr<texture::Texture::Xml> kd;
+
+                explicit Xml(const xml::Node &node);
+                explicit Xml(std::unique_ptr<texture::Texture::Xml> p_kd);
+                std::unique_ptr<BsdfMaterial> create() const override;
+            };
+
+        public:
+            explicit Diffuse(const Diffuse::Xml &xml) : Diffuse(xml.kd->create()){};
             explicit Diffuse(std::shared_ptr<texture::Texture> texture);
 
             // pair.first is sampled wi

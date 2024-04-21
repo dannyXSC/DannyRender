@@ -4,6 +4,7 @@
 
 #include <memory>
 
+#include <xml/Node.h>
 #include <geometry/Object.hpp>
 #include <geometry/Transformation.hpp>
 #include <geometry/BBox.hpp>
@@ -17,10 +18,26 @@ namespace danny
         class Sphere : public Object
         {
         public:
+            // Xml structure of the class.
+            struct Xml : public Object::Xml
+            {
+                float radius;
+                glm::vec3 center;
+                Transformation::Xml transformation;
+                std::unique_ptr<material::BsdfMaterial::Xml> bsdf_material;
+
+                explicit Xml(const xml::Node &node);
+                Xml(float p_radius, glm::vec3 p_center, const Transformation::Xml &p_transformation, std::unique_ptr<material::BsdfMaterial::Xml> p_bsdf_material);
+                std::unique_ptr<Object> create() const override;
+            };
+
+        public:
+            Sphere(const Sphere::Xml &xml)
+                : Sphere(xml.center, xml.radius, xml.bsdf_material->create(), xml.transformation.info) {}
             Sphere(const glm::vec3 &p, float r, std::shared_ptr<material::BsdfMaterial> m)
                 : Sphere(p, r, m, Transformation::Info()) {}
 
-            Sphere(const glm::vec3 &p, float r, std::shared_ptr<material::BsdfMaterial>, Transformation::Info &&t);
+            Sphere(const glm::vec3 &p, float r, std::shared_ptr<material::BsdfMaterial>, const Transformation::Info &t);
 
             Plane sample(std::shared_ptr<core::UniformSampler> sampler) const override;
             float getSurfaceArea() const override;

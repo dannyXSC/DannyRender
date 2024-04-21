@@ -16,8 +16,23 @@ namespace danny
         class Mesh : public Object
         {
         public:
-            explicit Mesh(const std::string path_bvh, std::shared_ptr<material::BsdfMaterial> m, Transformation::Info &&t = Transformation::Info());
-            explicit Mesh(std::shared_ptr<BVH<Triangle>> bvh, std::shared_ptr<material::BsdfMaterial> m, Transformation::Info &&t = Transformation::Info());
+            // Xml structure of the class.
+            struct Xml : public Object::Xml
+            {
+                std::string datapath;
+                Transformation::Xml transformation;
+                std::unique_ptr<material::BsdfMaterial::Xml> bsdf_material;
+
+                explicit Xml(const xml::Node &node);
+                Xml(const std::string &p_datapath, const Transformation::Xml &p_transformation, std::unique_ptr<material::BsdfMaterial::Xml> p_bsdf_material);
+                std::unique_ptr<Object> create() const override;
+            };
+
+        public:
+            explicit Mesh(const Mesh::Xml &xml)
+                : Mesh(xml.datapath, xml.bsdf_material ? xml.bsdf_material->create() : nullptr, xml.transformation.info){};
+            explicit Mesh(const std::string path_bvh, std::shared_ptr<material::BsdfMaterial> m, const Transformation::Info &t = Transformation::Info());
+            explicit Mesh(std::shared_ptr<BVH<Triangle>> bvh, std::shared_ptr<material::BsdfMaterial> m, const Transformation::Info &t = Transformation::Info());
 
             Plane sample(std::shared_ptr<core::UniformSampler> sampler) const override;
             float getSurfaceArea() const override;

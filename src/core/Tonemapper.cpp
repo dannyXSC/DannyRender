@@ -7,6 +7,37 @@ namespace danny
 {
     namespace core
     {
+        std::unique_ptr<Tonemapper::Xml> Tonemapper::Xml::factory(const xml::Node &node)
+        {
+            auto tonemapper_type = node.attribute("type", true);
+
+            if (tonemapper_type == std::string("Clamp"))
+            {
+                return std::make_unique<Clamp::Xml>(node);
+            }
+            else if (tonemapper_type == std::string("GlobalReinhard"))
+            {
+                return std::make_unique<GlobalReinhard::Xml>(node);
+            }
+            else
+            {
+                node.throwError("Unknown Tonemapper type.");
+            }
+
+            return nullptr;
+        }
+
+        Clamp::Xml::Xml(const xml::Node &node)
+        {
+            node.parseChildText("Min", &min);
+            node.parseChildText("Max", &max);
+        }
+
+        std::unique_ptr<Tonemapper> Clamp::Xml::create() const
+        {
+            return std::make_unique<Clamp>(*this);
+        }
+
         Clamp::Clamp(float min, float max)
             : m_min(min), m_max(max)
         {
@@ -28,6 +59,17 @@ namespace danny
             }
 
             return tonemapped_image;
+        }
+
+        GlobalReinhard::Xml::Xml(const xml::Node &node)
+        {
+            node.parseChildText("Key", &key);
+            node.parseChildText("MaxLuminance", &max_luminance);
+        }
+
+        std::unique_ptr<Tonemapper> GlobalReinhard::Xml::create() const
+        {
+            return std::make_unique<GlobalReinhard>(*this);
         }
 
         GlobalReinhard::GlobalReinhard(float key, float max_luminance)

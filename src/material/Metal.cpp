@@ -4,6 +4,24 @@ namespace danny
 {
     namespace material
     {
+        Metal::Xml::Xml(const xml::Node &node)
+        {
+            node.parseChildText("Ior", &ior);
+            // node.parseChildText("IorN", &ior_n.x, &ior_n.y, &ior_n.z);
+            // node.parseChildText("IorK", &ior_k.x, &ior_k.y, &ior_k.z);
+            roughness = texture::Texture::Xml::factory(node.child("Roughness", true));
+        }
+
+        Metal::Xml::Xml(const float &p_ior, std::unique_ptr<texture::Texture::Xml> p_roughness)
+            : ior(p_ior), roughness(std::move(p_roughness))
+        {
+        }
+
+        std::unique_ptr<BsdfMaterial> Metal::Xml::create() const
+        {
+            return std::make_unique<Metal>(*this);
+        }
+
         Metal::Metal(std::shared_ptr<texture::Texture> roughness, float ior)
             : m_roughness(roughness), m_ior(ior)
         {

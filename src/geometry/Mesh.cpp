@@ -2,18 +2,36 @@
 
 #include <iostream>
 
-#include <utils/Parser.h>
+#include <xml/Parser.h>
 
 namespace danny
 {
     namespace geometry
     {
-        Mesh::Mesh(const std::string path_bvh, std::shared_ptr<material::BsdfMaterial> m, Transformation::Info &&t)
-            : Mesh(utils::Parser::loadModel(path_bvh), m, std::move(t))
+        Mesh::Xml::Xml(const xml::Node &node)
+        {
+            attributes = node.attributes();
+            node.parseChildText("Datapath", &datapath);
+            transformation = node.child("Transformation") ? Transformation::Xml(node.child("Transformation")) : Transformation::Xml();
+            bsdf_material = node.parent().value() == std::string("Light") ? nullptr : material::BsdfMaterial::Xml::factory(node.child("BsdfMaterial", true));
+        }
+
+        Mesh::Xml::Xml(const std::string &p_datapath, const Transformation::Xml &p_transformation, std::unique_ptr<material::BsdfMaterial::Xml> p_bsdf_material)
+            : datapath(p_datapath), transformation(p_transformation), bsdf_material(std::move(p_bsdf_material))
         {
         }
 
-        Mesh::Mesh(std::shared_ptr<BVH<Triangle>> bvh, std::shared_ptr<material::BsdfMaterial> m, Transformation::Info &&t)
+        std::unique_ptr<Object> Mesh::Xml::create() const
+        {
+            return std::make_unique<Mesh>(*this);
+        }
+
+        Mesh::Mesh(const std::string path_bvh, std::shared_ptr<material::BsdfMaterial> m, const Transformation::Info &t)
+            : Mesh(xml::Parser::loadModel(path_bvh), m, std::move(t))
+        {
+        }
+
+        Mesh::Mesh(std::shared_ptr<BVH<Triangle>> bvh, std::shared_ptr<material::BsdfMaterial> m, const Transformation::Info &t)
             : m_transformation(t),
               m_bvh(bvh),
               m_area(0.0f),

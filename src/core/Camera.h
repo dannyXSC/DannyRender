@@ -1,8 +1,11 @@
 #ifndef __DANNY__CORE__CAMERA__
 #define __DANNY__CORE__CAMERA__
 
+#include <memory>
+
 #include <glm/vec2.hpp>
 
+#include <xml/Node.h>
 #include <geometry/Ray.hpp>
 
 namespace danny
@@ -11,6 +14,15 @@ namespace danny
     {
         class Camera
         {
+        public:
+            // Xml structure of the class.
+            struct Xml
+            {
+                virtual ~Xml() = default;
+                virtual std::unique_ptr<Camera> create() const = 0;
+                static std::unique_ptr<Camera::Xml> factory(const xml::Node &node);
+            };
+
         public:
             virtual ~Camera() = default;
 

@@ -12,6 +12,16 @@ namespace danny
 {
     namespace material
     {
+        // Cloth::Xml::Xml(const xml::Node &node)
+        // {
+        //     node.parseChildText("Albedo1", &cloth_para1.albedo.x, &cloth_para1.albedo.y, &cloth_para1.albedo.z);
+        // }
+
+        // std::unique_ptr<BsdfMaterial> Cloth::Xml::create() const
+        // {
+        //     return std::make_unique<Cloth>(*this);
+        // }
+
         Cloth::Cloth(const ClothPara &cloth_para1, const ClothPara &cloth_para2)
             : cloth_para1(cloth_para1), cloth_para2(cloth_para2),
               micro1(std::make_unique<microfacet::MicrocylinderCloth>(cloth_para1)),

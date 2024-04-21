@@ -9,6 +9,21 @@ namespace danny
 {
     namespace material
     {
+        Diffuse::Xml::Xml(const xml::Node &node)
+        {
+            kd = texture::Texture::Xml::factory(node.child("Kd", true));
+        }
+
+        Diffuse::Xml::Xml(std::unique_ptr<texture::Texture::Xml> p_kd)
+            : kd(std::move(p_kd))
+        {
+        }
+
+        std::unique_ptr<BsdfMaterial> Diffuse::Xml::create() const
+        {
+            return std::make_unique<Diffuse>(*this);
+        }
+
         Diffuse::Diffuse(std::shared_ptr<texture::Texture> texture)
             : m_texture(texture)
         {

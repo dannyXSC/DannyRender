@@ -38,6 +38,8 @@ namespace danny
     namespace integrator
     {
         class Integrator;
+        class Pathtracer;
+
     }
 
     namespace light
@@ -61,7 +63,7 @@ namespace danny
         class MicrocylinderCloth;
     }
 
-    namespace utils
+    namespace xml
     {
         class Parser;
     }

@@ -8,7 +8,26 @@ namespace danny
 {
     namespace geometry
     {
-        Sphere::Sphere(const glm::vec3 &p, float r, std::shared_ptr<material::BsdfMaterial> material, Transformation::Info &&t)
+        Sphere::Xml::Xml(const xml::Node &node)
+        {
+            attributes = node.attributes();
+            node.parseChildText("Radius", &radius);
+            node.parseChildText("Center", &center.x, &center.y, &center.z);
+            transformation = node.child("Transformation") ? Transformation::Xml(node.child("Transformation")) : Transformation::Xml();
+            bsdf_material = node.parent().value() == std::string("Light") ? nullptr : material::BsdfMaterial::Xml::factory(node.child("BsdfMaterial", true));
+        }
+
+        Sphere::Xml::Xml(float p_radius, glm::vec3 p_center, const Transformation::Xml &p_transformation, std::unique_ptr<material::BsdfMaterial::Xml> p_bsdf_material)
+            : radius(p_radius), center(p_center), transformation(p_transformation), bsdf_material(std::move(p_bsdf_material))
+        {
+        }
+
+        std::unique_ptr<Object> Sphere::Xml::create() const
+        {
+            return std::make_unique<Sphere>(*this);
+        }
+
+        Sphere::Sphere(const glm::vec3 &p, float r, std::shared_ptr<material::BsdfMaterial> material, const Transformation::Info &t)
             : m_transformation(t), m_bsdf_material(material)
         {
             // convert to object space whose sphere radius is 1

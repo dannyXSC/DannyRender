@@ -154,6 +154,7 @@ std::pair<danny::material::ClothPara, danny::material::ClothPara> getCloth6()
 void generateScene(const std::string &name)
 {
     auto red = std::make_shared<danny::texture::ConstantTexture>(glm::vec3(0.63f, 0.065f, 0.05f));
+    // auto red = std::make_shared<danny::texture::ConstantTexture>(glm::vec3(0.1f, 0.00f, 0.00f));
     auto green = std::make_shared<danny::texture::ConstantTexture>(glm::vec3(0.14f, 0.45f, 0.091f));
     auto white = std::make_shared<danny::texture::ConstantTexture>(glm::vec3(0.725f, 0.71f, 0.68f));
     auto blue = std::make_shared<danny::texture::ConstantTexture>(glm::vec3(0.14f, 0.05f, 0.45f));
@@ -218,13 +219,14 @@ void generateScene(const std::string &name)
                                                                pos,
                                                                dir,
                                                                up);
-    int spp = 1024;
+    int spp = 16;
     float cutoff_rate = 0.2f;
     int thread_num = 16;
     auto integrator = std::make_unique<danny::integrator::Pathtracer>(spp, cutoff_rate, thread_num);
 
     std::vector<std::unique_ptr<danny::core::Output>> outputs;
-    outputs.emplace_back(std::make_unique<danny::core::Ldr>(name, std::make_unique<danny::core::GlobalReinhard>(0.18, 1.0)));
+    // outputs.emplace_back(std::make_unique<danny::core::Ldr>(name, std::make_unique<danny::core::GlobalReinhard>(0.18, 1.0)));
+    outputs.emplace_back(std::make_unique<danny::core::Ldr>(name, std::make_unique<danny::core::Clamp>(0.f, 1.0f)));
     // danny::core::Ldr output(root_path, std::make_unique<danny::core::Clamp>(0.f, 1.0f));
 
     float secondary_ray_epsilon = 0.01;
@@ -593,10 +595,39 @@ void generateSceneCloth(const std::string &obj_path,
 //     }
 // }
 
-int main()
+#include <xml/Node.h>
+#include <core/Timer.h>
+using std::cout;
+using std::endl;
+int main(int argc, char *argv[])
 {
-    generateScene("./test.png");
-    // auto [cloth1, cloth2] = getCloth1();
-    // generateScene1(cloth1, cloth2, "./test.png");
-    // runGenerateCloth();
+    if (argc != 2)
+    {
+        std::cout << "Please indicate input location as the first argument of the program." << std::endl;
+        std::cout << "Do not add any other program arguments." << std::endl;
+        return 0;
+    }
+
+    try
+    {
+        using namespace danny;
+        core::Timer timer;
+
+        timer.start();
+        core::Scene scene(core::Scene::Xml(xml::Node::getRoot(argv[1])));
+        std::cout << "BVH build and input read time: " << timer.getTime() << std::endl;
+
+        scene.render();
+    }
+    catch (const std::runtime_error &e)
+    {
+        std::cout << e.what() << std::endl;
+    }
+
+    return 0;
 }
+
+// int main()
+// {
+//     generateScene("test");
+// }

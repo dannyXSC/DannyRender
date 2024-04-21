@@ -12,6 +12,15 @@ namespace danny
         class IntervalTexture : public Texture
         {
         public:
+            // Xml structure of the class.
+            struct Xml : public Texture::Xml
+            {
+                explicit Xml(const xml::Node &node);
+                std::unique_ptr<Texture> create() const override;
+            };
+
+        public:
+            explicit IntervalTexture(const IntervalTexture::Xml &xml){};
             explicit IntervalTexture(){};
 
             glm::vec3 fetch(const geometry::Intersection &intersection) const override;

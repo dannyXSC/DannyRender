@@ -7,8 +7,11 @@
 
 namespace danny
 {
-    namespace utils
+    namespace xml
     {
+        const std::unordered_set<std::string> Parser::gSupportedFormatsLoad{"jpg", "png", "tga", "bmp", "psd", "gif", "hdr", "pic"};
+        const std::unordered_set<std::string> Parser::gSupportedFormatsSave{"png", "bmp", "tga"};
+
         std::shared_ptr<geometry::BVH<geometry::Triangle>> Parser::loadModel(const std::string &path)
         {
             static std::unordered_map<std::string, std::shared_ptr<geometry::BVH<geometry::Triangle>>> path_to_bvh;
@@ -62,7 +65,8 @@ namespace danny
                 }
 
                 // TODO: error
-                bvh->buildWithMedianSplit();
+                // bvh->buildWithMedianSplit();
+                bvh->buildWithSAHSplit();
             }
 
             return path_to_bvh[path];

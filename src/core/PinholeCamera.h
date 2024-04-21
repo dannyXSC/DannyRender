@@ -1,6 +1,7 @@
 #ifndef __DANNY__CORE__PINHOLECAMERA__
 #define __DANNY__CORE__PINHOLECAMERA__
 
+#include <xml/Node.h>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
@@ -15,6 +16,28 @@ namespace danny
         class PinholeCamera : public Camera
         {
         public:
+            // Xml structure of the class.
+            struct Xml : Camera::Xml
+            {
+                glm::vec3 position;
+                glm::vec3 direction;
+                glm::vec3 up;
+                glm::vec2 fov_xy;
+                glm::ivec2 resolution;
+                float near_distance;
+
+                explicit Xml(const xml::Node &node);
+                std::unique_ptr<Camera> create() const override;
+            };
+
+        public:
+            explicit PinholeCamera(const PinholeCamera::Xml &xml)
+                : PinholeCamera(xml.resolution,
+                                xml.near_distance,
+                                xml.fov_xy,
+                                xml.position,
+                                xml.direction,
+                                xml.up){};
             explicit PinholeCamera(const glm::ivec2 &resolution,
                                    float near_distance,
                                    const glm::vec2 &fov_xy,

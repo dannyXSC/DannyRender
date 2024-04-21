@@ -4,6 +4,15 @@ namespace danny
 {
     namespace texture
     {
+        IntervalTexture::Xml::Xml(const xml::Node &node)
+        {
+        }
+
+        std::unique_ptr<Texture> IntervalTexture::Xml::create() const
+        {
+            return std::make_unique<IntervalTexture>(*this);
+        }
+
         glm::vec3 IntervalTexture::fetch(const geometry::Intersection &intersection) const
         {
             auto uv = intersection.uv;

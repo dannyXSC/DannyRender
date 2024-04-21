@@ -5,10 +5,16 @@
 #include <memory>
 #include <unordered_map>
 
+#include <core/forward_decl.h>
+#include <xml/Node.h>
+#include <integrator/Integrator.h>
+#include <integrator/Pathtracer.h>
+#include <core/Output.h>
+#include <core/Tonemapper.h>
 #include <core/Camera.h>
+#include <core/PinholeCamera.h>
 #include <light/Light.h>
 #include <geometry/BVH.h>
-#include <integrator/Integrator.h>
 #include <core/Image.h>
 
 namespace danny
@@ -17,6 +23,20 @@ namespace danny
     {
         class Scene
         {
+        public:
+            // Xml structure of the class.
+            struct Xml
+            {
+                glm::vec3 background_radiance;
+                float secondary_ray_epsilon;
+                std::unique_ptr<integrator::Integrator::Xml> integrator;
+                std::vector<std::unique_ptr<Output::Xml>> outputs;
+                std::unique_ptr<Camera::Xml> camera;
+                std::vector<std::unique_ptr<geometry::Object::Xml>> objects;
+                std::vector<std::unique_ptr<light::Light::Xml>> lights;
+
+                explicit Xml(const xml::Node &node);
+            };
 
         public:
             std::unique_ptr<Camera> camera;
@@ -27,6 +47,7 @@ namespace danny
             float secondary_ray_epsilon;
 
         public:
+            explicit Scene(const Scene::Xml &xml);
             explicit Scene(std::unique_ptr<integrator::Integrator> integrator,
                            std::unique_ptr<Camera> camera,
                            std::vector<std::unique_ptr<Output>> &outputs,

@@ -1,6 +1,7 @@
 #ifndef __DANNY__CORE__TONEMAPPER__
 #define __DANNY__CORE__TONEMAPPER__
 
+#include <xml/Node.h>
 #include <core/Image.h>
 
 namespace danny
@@ -9,6 +10,15 @@ namespace danny
     {
         class Tonemapper
         {
+        public:
+            // Xml structure of the class.
+            struct Xml
+            {
+                virtual ~Xml() = default;
+                virtual std::unique_ptr<Tonemapper> create() const = 0;
+                static std::unique_ptr<Tonemapper::Xml> factory(const xml::Node &node);
+            };
+
         public:
             virtual ~Tonemapper() = default;
 
@@ -19,6 +29,18 @@ namespace danny
         class Clamp : public Tonemapper
         {
         public:
+            // Xml structure of the class.
+            struct Xml : public Tonemapper::Xml
+            {
+                float min;
+                float max;
+
+                explicit Xml(const xml::Node &node);
+                std::unique_ptr<Tonemapper> create() const override;
+            };
+
+        public:
+            explicit Clamp(const Clamp::Xml &xml) : Clamp(xml.min, xml.max){};
             explicit Clamp(float min, float max);
 
             Image tonemap(const Image &image) const override;
@@ -32,6 +54,18 @@ namespace danny
         class GlobalReinhard : public Tonemapper
         {
         public:
+            // Xml structure of the class.
+            struct Xml : public Tonemapper::Xml
+            {
+                float key;
+                float max_luminance;
+
+                explicit Xml(const xml::Node &node);
+                std::unique_ptr<Tonemapper> create() const override;
+            };
+
+        public:
+            explicit GlobalReinhard(const GlobalReinhard::Xml &xml) : GlobalReinhard(xml.key, xml.max_luminance){};
             explicit GlobalReinhard(float key, float max_luminance);
 
             Image tonemap(const Image &image) const override;

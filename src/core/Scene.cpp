@@ -4,13 +4,54 @@
 #include <memory>
 
 #include <core/Timer.h>
-#include <core/Output.h>
-#include <core/Tonemapper.h>
 
 namespace danny
 {
     namespace core
     {
+        Scene::Xml::Xml(const xml::Node &node)
+        {
+            node.parseChildText("BackgroundRadiance", &background_radiance.x, 0.0f, &background_radiance.y, 0.0f, &background_radiance.z, 0.0f);
+            node.parseChildText("SecondaryRayEpsilon", &secondary_ray_epsilon, 1e-4f);
+            integrator = integrator::Integrator::Xml::factory(node.child("Integrator", true));
+            for (auto output = node.child("Output"); output; output = output.next())
+            {
+                outputs.push_back(Output::Xml::factory(output));
+            }
+
+            camera = std::make_unique<PinholeCamera::Xml>(node.child("Camera", true));
+            for (auto object = node.child("Object"); object; object = object.next())
+            {
+                objects.push_back(geometry::Object::Xml::factory(object));
+            }
+            for (auto light = node.child("Light"); light; light = light.next())
+            {
+                lights.push_back(light::Light::Xml::factory(light));
+            }
+        }
+
+        Scene::Scene(const Scene::Xml &xml)
+        {
+            this->background_radiance = xml.background_radiance;
+            this->secondary_ray_epsilon = xml.secondary_ray_epsilon;
+            this->m_integrator = xml.integrator->create();
+            this->camera = xml.camera->create();
+            this->m_image = std::make_unique<Image>(this->camera->get_resolution().x, this->camera->get_resolution().y);
+            for (auto &output_xml : xml.outputs)
+            {
+                m_outputs.push_back(output_xml->create());
+            }
+            for (auto &obj_xml : xml.objects)
+            {
+                addObject(obj_xml->create());
+            }
+            for (auto &light_xml : xml.lights)
+            {
+                addLight(light_xml->create());
+            }
+            buildBVH();
+        }
+
         Scene::Scene(std::unique_ptr<integrator::Integrator> integrator,
                      std::unique_ptr<Camera> camera,
                      std::vector<std::unique_ptr<Output>> &outputs,
@@ -21,7 +62,6 @@ namespace danny
             this->background_radiance = background_radiance;
             this->secondary_ray_epsilon = secondary_ray_epsilon;
             this->m_integrator = std::move(integrator);
-            // not consider output for a moment
             this->camera = std::move(camera);
             this->m_image = std::make_unique<Image>(this->camera->get_resolution().x, this->camera->get_resolution().y);
             for (auto &output : outputs)

@@ -5,6 +5,7 @@
 #include <core/Sampler.hpp>
 #include <geometry/Intersection.hpp>
 
+#include <xml/Node.h>
 #include <glm/vec3.hpp>
 #include <utility>
 
@@ -14,7 +15,15 @@ namespace danny
     {
         class BsdfMaterial
         {
-            // mainly copy from https://github.com/isikmustafa/glue with a little modification
+        public:
+            // Xml structure of the class.
+            struct Xml
+            {
+                virtual ~Xml() = default;
+                virtual std::unique_ptr<BsdfMaterial> create() const = 0;
+                static std::unique_ptr<BsdfMaterial::Xml> factory(const xml::Node &node);
+            };
+
         public:
             virtual ~BsdfMaterial() = default;
 

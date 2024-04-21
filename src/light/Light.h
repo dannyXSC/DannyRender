@@ -1,10 +1,12 @@
 #ifndef __DANNY__LIGHT__LIGHT__
 #define __DANNY__LIGHT__LIGHT__
 
+#include <unordered_map>
 #include <memory>
 
 #include <glm/vec3.hpp>
 
+#include <xml/Node.h>
 #include <core/Sampler.hpp>
 
 namespace danny
@@ -21,6 +23,17 @@ namespace danny
 
         class Light
         {
+        public:
+            // Xml structure of the class.
+            struct Xml
+            {
+                std::unordered_map<std::string, std::string> attributes;
+
+                virtual ~Xml() = default;
+                virtual std::unique_ptr<Light> create() const = 0;
+                static std::unique_ptr<Light::Xml> factory(const xml::Node &node);
+            };
+
         public:
             virtual ~Light() = default;
 

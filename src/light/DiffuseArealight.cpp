@@ -7,6 +7,18 @@ namespace danny
 {
     namespace light
     {
+        DiffuseArealight::Xml::Xml(const xml::Node &node)
+            : object(geometry::Object::Xml::factory(node.child("Object", true)))
+        {
+            node.parseChildText("Flux", &flux.x, &flux.y, &flux.z);
+            attributes = node.attributes();
+        }
+
+        std::unique_ptr<Light> DiffuseArealight::Xml::create() const
+        {
+            return std::make_unique<DiffuseArealight>(*this);
+        }
+
         DiffuseArealight::DiffuseArealight(const glm::vec3 &flux, std::unique_ptr<geometry::Object> obj)
             : m_flux(flux), m_object(std::move(obj)), m_le(m_flux * glm::one_over_pi<float>() / m_object->getSurfaceArea()), m_pdf(1.0f / m_object->getSurfaceArea())
         {

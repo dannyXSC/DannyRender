@@ -15,6 +15,23 @@ namespace danny
         class Metal : public BsdfMaterial
         {
         public:
+            // Xml structure of the class.
+            struct Xml : public BsdfMaterial::Xml
+            {
+                float ior;
+                // glm::vec3 ior_n;
+                // glm::vec3 ior_k;
+                std::unique_ptr<texture::Texture::Xml> roughness;
+
+                explicit Xml(const xml::Node &node);
+                Xml(const float &p_ior, std::unique_ptr<texture::Texture::Xml> p_roughness);
+                // Xml(const glm::vec3 &p_ior_n, const glm::vec3 &p_ior_k, std::unique_ptr<texture::Texture::Xml> p_roughness);
+                std::unique_ptr<BsdfMaterial> create() const override;
+            };
+
+        public:
+            explicit Metal(const Metal::Xml &xml)
+                : Metal(std::move(xml.roughness->create()), xml.ior){};
             explicit Metal(std::shared_ptr<texture::Texture> roughness, float ior);
 
             // pair.first is sampled wi

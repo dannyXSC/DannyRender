@@ -5,6 +5,20 @@ namespace danny
 {
     namespace core
     {
+        PinholeCamera::Xml::Xml(const xml::Node &node)
+        {
+            node.parseChildText("Position", &position.x, &position.y, &position.z);
+            node.parseChildText("Direction", &direction.x, &direction.y, &direction.z);
+            node.parseChildText("Up", &up.x, &up.y, &up.z);
+            node.parseChildText("FovXY", &fov_xy.x, &fov_xy.y);
+            node.parseChildText("Resolution", &resolution.x, &resolution.y);
+            node.parseChildText("NearDistance", &near_distance);
+        }
+        std::unique_ptr<Camera> PinholeCamera::Xml::create() const
+        {
+            return std::make_unique<PinholeCamera>(*this);
+        }
+
         PinholeCamera::PinholeCamera(const glm::ivec2 &resolution, float near_distance,
                                      const glm::vec2 &fov_xy, const glm::vec3 &pos,
                                      const glm::vec3 &dir, const glm::vec3 &up)

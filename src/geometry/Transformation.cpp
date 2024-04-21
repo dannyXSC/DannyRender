@@ -8,6 +8,25 @@ namespace danny
 {
     namespace geometry
     {
+        Transformation::Xml::Xml()
+            : info(glm::vec3(1.0), glm::vec3(0.0), glm::vec3(0.0))
+        {
+        }
+
+        Transformation::Xml::Xml(const xml::Node &node)
+        {
+            node.parseChildText("Scaling", &info.scaling.x, 1.0f, &info.scaling.y, 1.0f, &info.scaling.z, 1.0f);
+            node.parseChildText("Rotation", &info.rotation.x, 0.0f, &info.rotation.y, 0.0f, &info.rotation.z, 0.0f);
+            node.parseChildText("Translation", &info.translation.x, 0.0f, &info.translation.y, 0.0f, &info.translation.z, 0.0f);
+
+            if (node.parent().attribute("type") == std::string("Sphere"))
+            {
+                if (!(info.scaling.x == info.scaling.y && info.scaling.y == info.scaling.z))
+                {
+                    node.child("Scaling").throwError("Non-uniform scaling is not allowed for spheres.");
+                }
+            }
+        }
 
         Transformation::Transformation(const Transformation::Info &info)
             : m_transformation(glm::orientate4(glm::radians(glm::vec3(info.rotation.x, info.rotation.z, info.rotation.y))) * glm::scale(info.scaling)),
