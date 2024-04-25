@@ -10,8 +10,6 @@
 
 ## Gallery
 
-> spp 1024
-
 - diffuse
 
 <img src="./asset/result/漫反射物体.png" style="zoom:25%;" />
@@ -31,6 +29,18 @@
 - cloth
 
 <img src="./asset/result/1711877313_1024_cloth1.png" style="zoom:25%;" />
+
+- kulla-conty approximate
+
+  上方使用了kulla conty approximate
+
+  ![mori-16](./README.assets/mori-16.png)
+
+  上方使用了kulla conty approximate
+
+  ![constract](./README.assets/constract.png)
+
+
 
 ## dependency
 
