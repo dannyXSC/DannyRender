@@ -46,7 +46,7 @@ namespace danny
             int m_progress;
 
         private:
-            const glm::vec3 estimatePixel(const core::Scene &scene, const geometry::Ray &ray, std::shared_ptr<core::UniformSampler> sampler, bool light_explicitly_sampled = false);
+            const glm::vec3 estimatePixel(const core::Scene &scene, const geometry::Ray &ray, std::shared_ptr<core::UniformSampler> sampler, int depth, bool light_explicitly_sampled = false);
             void integratePatch(const core::Scene &scene, core::Image &output, int row_begin, int row_end, int id);
         };
     }

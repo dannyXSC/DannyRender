@@ -18,7 +18,6 @@ namespace danny
             {
                 outputs.push_back(Output::Xml::factory(output));
             }
-
             camera = std::make_unique<PinholeCamera::Xml>(node.child("Camera", true));
             for (auto object = node.child("Object"); object; object = object.next())
             {

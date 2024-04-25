@@ -71,7 +71,7 @@ namespace danny
                     {
                         geometry::Ray ray = scene.camera->castRay(x + i, y + j, sampler->sample(), sampler->sample());
 
-                        auto color = estimatePixel(scene, ray, sampler);
+                        auto color = estimatePixel(scene, ray, sampler, 0);
                         result += color * weight;
                     }
                     output.set(x + i, y + j, result);
@@ -86,8 +86,10 @@ namespace danny
         const glm::vec3 Pathtracer::estimatePixel(const core::Scene &scene,
                                                   const geometry::Ray &ray,
                                                   std::shared_ptr<core::UniformSampler> sampler,
-                                                  bool light_explicitly_sampled)
+                                                  int depth, bool light_explicitly_sampled)
         {
+            if (depth > 3)
+                return glm::vec3(0.f);
             geometry::Intersection inter_obj;
             scene.intersect(ray, inter_obj, std::numeric_limits<float>::max());
 
@@ -116,12 +118,12 @@ namespace danny
 
             // 对光源进行重要性采样
             glm::vec3 L_dir(0);
-            light_explicitly_sampled = false;
             for (int i = 0; i < scene.lights.size(); i++)
             {
                 auto &light = scene.lights[i];
                 auto light_sample = light->sample(sampler, inter_obj);
 
+                // 如果射到的是背面，则往背面偏移，否则，向正面偏移
                 auto ray_dot_n = glm::dot(ray.direction, inter_obj.plane.normal);
                 auto offset = (ray_dot_n > 0
                                    ? -inter_obj.plane.normal * scene.secondary_ray_epsilon
@@ -134,8 +136,6 @@ namespace danny
                 auto wi_tangent = tangent_space.vectorToLocalSpace(light_sample.wi_world);
                 auto bsdf = inter_obj.bsdf_material->getBsdf(wi_tangent, wo_tangent, inter_obj);
 
-                light_explicitly_sampled = true;
-
                 if (!scene.intersectShadowRay(ray_to_light,
                                               light_sample.distance +
                                                   5.f *
@@ -144,6 +144,7 @@ namespace danny
                                                            ? 1
                                                            : -1)))
                 {
+
                     // 与光源之间没有遮挡
                     auto le = light_sample.le;
                     auto cos = glm::abs(core::math::cosTheta(wi_tangent));
@@ -156,11 +157,13 @@ namespace danny
                     {
                         L_dir = L_dir + f;
                     }
-                    // 若没有概率从这个方向射出去
-                    // 就说明这束光所在的立体角，应该不需要被重要性采样
-                    if (glm::l2Norm(bsdf) < 1e-5)
-                        light_explicitly_sampled = false;
                 }
+                // 若没有概率从这个方向射出去
+                // 就说明这束光所在的立体角，应该不需要被重要性采样
+                if (!(core::math::cosTheta(wi_tangent) > 0.0f &&
+                      core::math::cosTheta(wo_tangent) > 0.0f &&
+                      inter_obj.bsdf_material->getPdf(wi_tangent, wo_tangent, inter_obj) < 1e-5))
+                    light_explicitly_sampled = true;
             }
 
             // 俄罗斯轮盘赌
@@ -179,7 +182,7 @@ namespace danny
             geometry::Ray ray_to_next(inter_obj.plane.point + scene.secondary_ray_epsilon * wi_world, wi_world);
             // 判断是不是光源，由light_explicitly_sampled 携带信息了
             // 判断击中物体了没，由下一次迭代计算
-            f = f * estimatePixel(scene, ray_to_next, sampler, light_explicitly_sampled);
+            f = f * estimatePixel(scene, ray_to_next, sampler, depth + 1, light_explicitly_sampled);
             auto f_sum = f.x + f.y + f.z;
 
             if (f_sum > 0.f && !glm::isinf(f_sum))

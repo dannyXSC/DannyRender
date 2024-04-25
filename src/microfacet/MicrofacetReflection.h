@@ -8,29 +8,31 @@
 #include <glm/trigonometric.hpp>
 #include <glm/vec3.hpp>
 
+#include <core/forward_decl.h>
 #include <core/Sampler.hpp>
+#include <microfacet/Microfacet.h>
 
 namespace danny
 {
     namespace microfacet
     {
-        template <typename MicrofacetDistribution, bool tSampleVisibleNormals = true>
-        class MicrofacetReflection
+        class MicrofacetReflection : public Microfacet
         {
         public:
-            explicit MicrofacetReflection(float roughness);
+            explicit MicrofacetReflection(std::unique_ptr<GGXDistribution> distribution, std::unique_ptr<Fresnel> fresnel);
 
-            std::pair<glm::vec3, glm::vec3> sampleWi(const glm::vec3 &wo_tangent, std::shared_ptr<core::UniformSampler> sampler, float nt_over_ni) const;
-            // std::pair<glm::vec3, glm::vec3> sampleWi(const glm::vec3 &wo_tangent, std::shared_ptr<core::UniformSampler> sampler, const glm::vec3 &nt_over_ni, const glm::vec3 &kt_over_ki) const;
-            glm::vec3 getBsdf(const glm::vec3 &wi_tangent, const glm::vec3 &wo_tangent, float nt_over_ni) const;
-            // glm::vec3 getBsdf(const glm::vec3 &wi_tangent, const glm::vec3 &wo_tangent, const glm::vec3 &nt_over_ni, const glm::vec3 &kt_over_ki) const;
-            float getPdf(const glm::vec3 &wi_tangent, const glm::vec3 &wo_tangent) const;
+            std::pair<glm::vec3, glm::vec3> sampleWi(float roughness, const glm::vec3 &wo_tangent, std::shared_ptr<core::UniformSampler> sampler) const override;
+            glm::vec3 getBsdf(float roughness, const glm::vec3 &wi_tangent, const glm::vec3 &wo_tangent) const override;
+            float getPdf(float roughness, const glm::vec3 &wi_tangent, const glm::vec3 &wo_tangent) const override;
 
         private:
-            MicrofacetDistribution m_microfacet;
+            std::unique_ptr<GGXDistribution> m_microfacet;
+            std::unique_ptr<Fresnel> m_fresnel;
+
+        public:
+            friend class KullaConty;
         };
     }
 }
 
-#include "MicrofacetReflection.inl"
 #endif

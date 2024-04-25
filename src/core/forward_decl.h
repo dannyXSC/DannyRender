@@ -60,7 +60,12 @@ namespace danny
 
     namespace microfacet
     {
+        class GGXDistribution;
+        class Fresnel;
         class MicrocylinderCloth;
+        class Microfacet;
+        class MicrofacetReflection;
+        class KullaConty;
     }
 
     namespace xml

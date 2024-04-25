@@ -14,6 +14,7 @@
 		</Tonemapper>
 	</Output>
 
+
 	<Camera type="Pinhole">
 		<Position>278 273 -800</Position>
 		<Direction>0 0 1</Direction>

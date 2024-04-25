@@ -13,20 +13,20 @@ namespace danny
         class GGXDistribution
         {
         public:
-            explicit GGXDistribution(float roughness);
-
+            virtual ~GGXDistribution() = default;
             // Samples from distribution of normals.
-            glm::vec3 sampleWhWmlt07(std::shared_ptr<core::UniformSampler> sampler) const;
-            float pdfWmlt07(const glm::vec3 &wh_tangent) const;
-            // Samples from distribution of visible normals and causes much less variance at grazing angles.
-            // glm::vec3 sampleWhHd14(const glm::vec3 &wv_tangent, core::UniformSampler &sampler) const;
-            // float pdfHd14(const glm::vec3 &wv_tangent, const glm::vec3 &wh_tangent) const;
+            virtual glm::vec3 sample(float roughness, std::shared_ptr<core::UniformSampler> sampler) const = 0;
+            virtual float pdf(float roughness, const glm::vec3 &wh_tangent) const = 0;
             // Distribution and Masking-Shadowing functions.
-            float d(const glm::vec3 &wh_tangent) const;
-            float g1(const glm::vec3 &wv_tangent, const glm::vec3 &wh_tangent) const;
+            float d(float roughness, const glm::vec3 &wh_tangent) const;
+            float g1(float roughness, const glm::vec3 &wv_tangent, const glm::vec3 &wh_tangent) const;
+        };
 
-        private:
-            float m_ag;
+        class Wmlt07 : public GGXDistribution
+        {
+        public:
+            glm::vec3 sample(float roughness, std::shared_ptr<core::UniformSampler> sampler) const override;
+            float pdf(float roughness, const glm::vec3 &wh_tangent) const override;
         };
     }
 }

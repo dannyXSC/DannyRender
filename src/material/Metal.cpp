@@ -6,15 +6,8 @@ namespace danny
     {
         Metal::Xml::Xml(const xml::Node &node)
         {
-            node.parseChildText("Ior", &ior);
-            // node.parseChildText("IorN", &ior_n.x, &ior_n.y, &ior_n.z);
-            // node.parseChildText("IorK", &ior_k.x, &ior_k.y, &ior_k.z);
+            fresnel = microfacet::Fresnel::Xml::factory(node.child("Fresnel", true));
             roughness = texture::Texture::Xml::factory(node.child("Roughness", true));
-        }
-
-        Metal::Xml::Xml(const float &p_ior, std::unique_ptr<texture::Texture::Xml> p_roughness)
-            : ior(p_ior), roughness(std::move(p_roughness))
-        {
         }
 
         std::unique_ptr<BsdfMaterial> Metal::Xml::create() const
@@ -22,28 +15,29 @@ namespace danny
             return std::make_unique<Metal>(*this);
         }
 
-        Metal::Metal(std::shared_ptr<texture::Texture> roughness, float ior)
-            : m_roughness(roughness), m_ior(ior)
+        Metal::Metal(std::shared_ptr<texture::Texture> roughness, std::unique_ptr<microfacet::Fresnel> fresnel)
+            : m_roughness(roughness)
         {
+            std::unique_ptr<microfacet::GGXDistribution> distribution = std::make_unique<microfacet::Wmlt07>();
+            m_microfacet_reflection = std::make_unique<microfacet::MicrofacetReflection>(std::move(distribution), std::move(fresnel));
         }
 
-        std::pair<glm::vec3, glm::vec3> Metal::sampleWi(const glm::vec3 &wo_tangent, std::shared_ptr<core::UniformSampler> sampler,
-                                                        const geometry::Intersection &intersection) const
+        std::pair<glm::vec3, glm::vec3> Metal::sampleWi(const glm::vec3 &wo_tangent, std::shared_ptr<core::UniformSampler> sampler, const geometry::Intersection &intersection) const
         {
-            microfacet::MicrofacetReflection<microfacet::GGXDistribution> microfacet_reflection(m_roughness->fetch(intersection).x);
-            return microfacet_reflection.sampleWi(wo_tangent, sampler, m_ior);
+            auto roughness = m_roughness->fetch(intersection).x;
+            return m_microfacet_reflection->sampleWi(roughness, wo_tangent, sampler);
         }
 
         glm::vec3 Metal::getBsdf(const glm::vec3 &wi_tangent, const glm::vec3 &wo_tangent, const geometry::Intersection &intersection) const
         {
-            microfacet::MicrofacetReflection<microfacet::GGXDistribution> microfacet_reflection(m_roughness->fetch(intersection).x);
-            return microfacet_reflection.getBsdf(wi_tangent, wo_tangent, m_ior);
+            auto roughness = m_roughness->fetch(intersection).x;
+            return m_microfacet_reflection->getBsdf(roughness, wi_tangent, wo_tangent);
         }
 
         float Metal::getPdf(const glm::vec3 &wi_tangent, const glm::vec3 &wo_tangent, const geometry::Intersection &intersection) const
         {
-            microfacet::MicrofacetReflection<microfacet::GGXDistribution> microfacet_reflection(m_roughness->fetch(intersection).x);
-            return microfacet_reflection.getPdf(wi_tangent, wo_tangent);
+            auto roughness = m_roughness->fetch(intersection).x;
+            return m_microfacet_reflection->getPdf(roughness, wi_tangent, wo_tangent);
         }
 
         bool Metal::hasDeltaDistribution(const geometry::Intersection &intersection) const

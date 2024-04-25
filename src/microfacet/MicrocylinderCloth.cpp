@@ -51,12 +51,13 @@ namespace danny
         glm::vec3 MicrocylinderCloth::getBsdf(float theta_d, float theta_h, float phi_d, float cosThetaI, float cosThetaO) const
         {
             float Fr_cosTheta_i = glm::cos(theta_d) * glm::cos(phi_d * 0.5);
-            float Fr = fresnel::Dielectric()(eta, Fr_cosTheta_i);
-            float Ft = (1.0f - Fr);
-            float F = Ft * Ft;
+            auto fresnel = Dielectric(eta);
+            auto Fr = fresnel.evaluate(Fr_cosTheta_i);
+            auto Ft = (1.0f - Fr);
+            auto F = Ft * Ft;
 
-            float rs = Fr * scatteringRs(phi_d, theta_h);
-            float rv = F * scatteringRv(theta_h, cosThetaI, cosThetaO);
+            auto rs = Fr * scatteringRs(phi_d, theta_h);
+            auto rv = F * scatteringRv(theta_h, cosThetaI, cosThetaO);
             return (rs + rv * albedo) / glm::vec3(glm::pow(glm::cos(theta_d), 2.0));
         }
 

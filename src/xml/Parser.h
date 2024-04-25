@@ -7,6 +7,8 @@
 #include <memory>
 #include <unordered_set>
 
+#include <core/Image.h>
+
 namespace danny
 {
     namespace xml
@@ -19,6 +21,8 @@ namespace danny
 
         public:
             static std::shared_ptr<geometry::BVH<geometry::Triangle>> loadModel(const std::string &path);
+            static std::shared_ptr<geometry::BVH<geometry::Triangle>> loadModel(const std::string &path, const std::string &object_name);
+            static std::shared_ptr<std::vector<core::Image>> loadImage(const std::string &path, bool mipmapping = false);
         };
     }
 }

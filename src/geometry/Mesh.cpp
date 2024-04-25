@@ -12,6 +12,9 @@ namespace danny
         {
             attributes = node.attributes();
             node.parseChildText("Datapath", &datapath);
+            // for a .obj file contains multiple objects
+            // default ""
+            node.parseChildText("ObjectName", &object_name, object_name);
             transformation = node.child("Transformation") ? Transformation::Xml(node.child("Transformation")) : Transformation::Xml();
             bsdf_material = node.parent().value() == std::string("Light") ? nullptr : material::BsdfMaterial::Xml::factory(node.child("BsdfMaterial", true));
         }
@@ -26,8 +29,9 @@ namespace danny
             return std::make_unique<Mesh>(*this);
         }
 
-        Mesh::Mesh(const std::string path_bvh, std::shared_ptr<material::BsdfMaterial> m, const Transformation::Info &t)
-            : Mesh(xml::Parser::loadModel(path_bvh), m, std::move(t))
+        Mesh::Mesh(const std::string path_bvh, const std::string object_name, std::shared_ptr<material::BsdfMaterial> m, const Transformation::Info &t)
+            : Mesh(object_name.size() == 0 ? xml::Parser::loadModel(path_bvh) : xml::Parser::loadModel(path_bvh, object_name),
+                   m, std::move(t))
         {
         }
 

@@ -1,0 +1,1060 @@
+<Scene>
+    <SecondaryRayEpsilon>0.1</SecondaryRayEpsilon>
+    <Integrator type='Pathtracer'>
+        <SampleCount>2048</SampleCount>
+        <CutoffProbability>0.2</CutoffProbability>
+    </Integrator>
+
+    <Output type='Ldr'>
+        <Path>../result/cache/mori-16</Path>
+        <Format>png</Format>
+        <Tonemapper type='GlobalReinhard'>
+            <Key>0.18</Key>
+            <MaxLuminance>1.0</MaxLuminance>
+        </Tonemapper>
+    </Output>
+
+    <Output type='Ldr'>
+        <Path>../result/cache/mori-16-clamp</Path>
+        <Format>png</Format>
+        <Tonemapper type='Clamp'>
+            <Min>0.0</Min>
+            <Max>1.0</Max>
+        </Tonemapper>
+    </Output>
+
+    <Camera type='Pinhole'>
+        <Position>0 8 -8</Position>
+        <Direction>0 -4 4</Direction>
+        <Up>0 1 0</Up>
+        <FovXY>90 30</FovXY>
+        <Resolution>2239 600</Resolution>
+        <NearDistance>0.1</NearDistance>
+    </Camera>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>BackGroundMat</ObjectName>
+        <BsdfMaterial type='Diffuse'>
+            <Kd textureType='Constant'>
+                <Value>0.708 0.721 0.758</Value>
+            </Kd>
+        </BsdfMaterial>
+        <Transformation>
+            <Scaling>1.5 1 1.5</Scaling>
+        </Transformation>
+    </Object>
+
+    <!-- Mori 1 -->
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>InnerMat</ObjectName>
+        <BsdfMaterial type='Metal'>
+            <Fresnel type='Conductor'>
+                <N>0.131 0.44715 1.4215</N>
+                <K>4.0624 2.4212 1.9342</K>
+            </Fresnel>
+            <Roughness textureType='Constant'>
+                <Value>0.6 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-9 0 0</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>OuterMat</ObjectName>
+        <BsdfMaterial type='Metal'>
+            <Fresnel type='Conductor'>
+                <N>0.131 0.44715 1.4215</N>
+                <K>4.0624 2.4212 1.9342</K>
+            </Fresnel>
+            <Roughness textureType='Constant'>
+                <Value>0.6 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-9 0 0</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <!-- Mori 1 -->
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>InnerMat</ObjectName>
+        <BsdfMaterial type='Metal'>
+            <Fresnel type='Conductor'>
+                <N>0.131 0.44715 1.4215</N>
+                <K>4.0624 2.4212 1.9342</K>
+            </Fresnel>
+            <Roughness textureType='Constant'>
+                <Value>0.55 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-7.5 0 0</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>OuterMat</ObjectName>
+        <BsdfMaterial type='Metal'>
+            <Fresnel type='Conductor'>
+                <N>0.131 0.44715 1.4215</N>
+                <K>4.0624 2.4212 1.9342</K>
+            </Fresnel>
+            <Roughness textureType='Constant'>
+                <Value>0.55 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-7.5 0 0</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <!-- Mori 1 -->
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>InnerMat</ObjectName>
+        <BsdfMaterial type='Metal'>
+            <Fresnel type='Conductor'>
+                <N>0.131 0.44715 1.4215</N>
+                <K>4.0624 2.4212 1.9342</K>
+            </Fresnel>
+            <Roughness textureType='Constant'>
+                <Value>0.5 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-6 0 0</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>OuterMat</ObjectName>
+        <BsdfMaterial type='Metal'>
+            <Fresnel type='Conductor'>
+                <N>0.131 0.44715 1.4215</N>
+                <K>4.0624 2.4212 1.9342</K>
+            </Fresnel>
+            <Roughness textureType='Constant'>
+                <Value>0.5 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-6 0 0</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <!-- Mori 1 -->
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>InnerMat</ObjectName>
+        <BsdfMaterial type='Metal'>
+            <Fresnel type='Conductor'>
+                <N>0.131 0.44715 1.4215</N>
+                <K>4.0624 2.4212 1.9342</K>
+            </Fresnel>
+            <Roughness textureType='Constant'>
+                <Value>0.45 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-4.5 0 0</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>OuterMat</ObjectName>
+        <BsdfMaterial type='Metal'>
+            <Fresnel type='Conductor'>
+                <N>0.131 0.44715 1.4215</N>
+                <K>4.0624 2.4212 1.9342</K>
+            </Fresnel>
+            <Roughness textureType='Constant'>
+                <Value>0.45 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-4.5 0 0</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <!-- Mori 1 -->
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>InnerMat</ObjectName>
+        <BsdfMaterial type='Metal'>
+            <Fresnel type='Conductor'>
+                <N>0.131 0.44715 1.4215</N>
+                <K>4.0624 2.4212 1.9342</K>
+            </Fresnel>
+            <Roughness textureType='Constant'>
+                <Value>0.4 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-3 0 0</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>OuterMat</ObjectName>
+        <BsdfMaterial type='Metal'>
+            <Fresnel type='Conductor'>
+                <N>0.131 0.44715 1.4215</N>
+                <K>4.0624 2.4212 1.9342</K>
+            </Fresnel>
+            <Roughness textureType='Constant'>
+                <Value>0.4 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-3 0 0</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <!-- Mori 1 -->
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>InnerMat</ObjectName>
+        <BsdfMaterial type='Metal'>
+            <Fresnel type='Conductor'>
+                <N>0.131 0.44715 1.4215</N>
+                <K>4.0624 2.4212 1.9342</K>
+            </Fresnel>
+            <Roughness textureType='Constant'>
+                <Value>0.35 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-1.5 0 0</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>OuterMat</ObjectName>
+        <BsdfMaterial type='Metal'>
+            <Fresnel type='Conductor'>
+                <N>0.131 0.44715 1.4215</N>
+                <K>4.0624 2.4212 1.9342</K>
+            </Fresnel>
+            <Roughness textureType='Constant'>
+                <Value>0.35 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-1.5 0 0</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <!-- Mori 1 -->
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>InnerMat</ObjectName>
+        <BsdfMaterial type='Metal'>
+            <Fresnel type='Conductor'>
+                <N>0.131 0.44715 1.4215</N>
+                <K>4.0624 2.4212 1.9342</K>
+            </Fresnel>
+            <Roughness textureType='Constant'>
+                <Value>0.3 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-0 0 0</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>OuterMat</ObjectName>
+        <BsdfMaterial type='Metal'>
+            <Fresnel type='Conductor'>
+                <N>0.131 0.44715 1.4215</N>
+                <K>4.0624 2.4212 1.9342</K>
+            </Fresnel>
+            <Roughness textureType='Constant'>
+                <Value>0.3 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-0 0 0</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <!-- Mori 2 -->
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>InnerMat</ObjectName>
+        <BsdfMaterial type='Metal'>
+            <Fresnel type='Conductor'>
+                <N>0.131 0.44715 1.4215</N>
+                <K>4.0624 2.4212 1.9342</K>
+            </Fresnel>
+            <Roughness textureType='Constant'>
+                <Value>0.25 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>1.5 0 0</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>OuterMat</ObjectName>
+        <BsdfMaterial type='Metal'>
+            <Fresnel type='Conductor'>
+                <N>0.131 0.44715 1.4215</N>
+                <K>4.0624 2.4212 1.9342</K>
+            </Fresnel>
+            <Roughness textureType='Constant'>
+                <Value>0.25 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>1.5 0 0</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <!-- Mori 3 -->
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>InnerMat</ObjectName>
+        <BsdfMaterial type='Metal'>
+            <Fresnel type='Conductor'>
+                <N>0.131 0.44715 1.4215</N>
+                <K>4.0624 2.4212 1.9342</K>
+            </Fresnel>
+            <Roughness textureType='Constant'>
+                <Value>0.2 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>3 0 0</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>OuterMat</ObjectName>
+        <BsdfMaterial type='Metal'>
+            <Fresnel type='Conductor'>
+                <N>0.131 0.44715 1.4215</N>
+                <K>4.0624 2.4212 1.9342</K>
+            </Fresnel>
+            <Roughness textureType='Constant'>
+                <Value>0.2 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>3 0 0</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <!-- Mori 3 -->
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>InnerMat</ObjectName>
+        <BsdfMaterial type='Metal'>
+            <Fresnel type='Conductor'>
+                <N>0.131 0.44715 1.4215</N>
+                <K>4.0624 2.4212 1.9342</K>
+            </Fresnel>
+            <Roughness textureType='Constant'>
+                <Value>0.15 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>4.5 0 0</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>OuterMat</ObjectName>
+        <BsdfMaterial type='Metal'>
+            <Fresnel type='Conductor'>
+                <N>0.131 0.44715 1.4215</N>
+                <K>4.0624 2.4212 1.9342</K>
+            </Fresnel>
+            <Roughness textureType='Constant'>
+                <Value>0.15 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>4.5 0 0</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <!-- Mori 4 -->
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>InnerMat</ObjectName>
+        <BsdfMaterial type='Metal'>
+            <Fresnel type='Conductor'>
+                <N>0.131 0.44715 1.4215</N>
+                <K>4.0624 2.4212 1.9342</K>
+            </Fresnel>
+            <Roughness textureType='Constant'>
+                <Value>0.1 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>6 0 0</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>OuterMat</ObjectName>
+        <BsdfMaterial type='Metal'>
+            <Fresnel type='Conductor'>
+                <N>0.131 0.44715 1.4215</N>
+                <K>4.0624 2.4212 1.9342</K>
+            </Fresnel>
+            <Roughness textureType='Constant'>
+                <Value>0.1 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>6 0 0</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <!-- Mori 5 -->
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>InnerMat</ObjectName>
+        <BsdfMaterial type='Metal'>
+            <Fresnel type='Conductor'>
+                <N>0.131 0.44715 1.4215</N>
+                <K>4.0624 2.4212 1.9342</K>
+            </Fresnel>
+            <Roughness textureType='Constant'>
+                <Value>0.05 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>7.5 0 0</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>OuterMat</ObjectName>
+        <BsdfMaterial type='Metal'>
+            <Fresnel type='Conductor'>
+                <N>0.131 0.44715 1.4215</N>
+                <K>4.0624 2.4212 1.9342</K>
+            </Fresnel>
+            <Roughness textureType='Constant'>
+                <Value>0.05 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>7.5 0 0</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <!--  -->
+    <!--  -->
+    <!--  -->
+    <!--  -->
+    <!--  -->
+    <!--  -->
+    <!--  -->
+    <!--  -->
+    <!-- Kulla Conty -->
+    <!--  -->
+    <!--  -->
+    <!--  -->
+    <!--  -->
+    <!--  -->
+    <!--  -->
+    <!--  -->
+    <!--  -->
+    <!--  -->
+    <!-- Mori 1 -->
+    <!-- Mori 1 -->
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>InnerMat</ObjectName>
+        <BsdfMaterial type='KullaContyMetal'>
+            <N>0.131 0.44715 1.4215</N>
+            <K>4.0624 2.4212 1.9342</K>
+            <PrecomputedE textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_E_LUT.png</Datapath>
+            </PrecomputedE>
+            <PrecomputedEAvg textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_Eavg_LUT.png</Datapath>
+            </PrecomputedEAvg>
+            <Roughness textureType='Constant'>
+                <Value>0.6 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-9 0 3</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>OuterMat</ObjectName>
+        <BsdfMaterial type='KullaContyMetal'>
+            <N>0.131 0.44715 1.4215</N>
+            <K>4.0624 2.4212 1.9342</K>
+            <PrecomputedE textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_E_LUT.png</Datapath>
+            </PrecomputedE>
+            <PrecomputedEAvg textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_Eavg_LUT.png</Datapath>
+            </PrecomputedEAvg>
+            <Roughness textureType='Constant'>
+                <Value>0.6 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-9 0 3</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <!-- Mori 1 -->
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>InnerMat</ObjectName>
+        <BsdfMaterial type='KullaContyMetal'>
+            <N>0.131 0.44715 1.4215</N>
+            <K>4.0624 2.4212 1.9342</K>
+            <PrecomputedE textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_E_LUT.png</Datapath>
+            </PrecomputedE>
+            <PrecomputedEAvg textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_Eavg_LUT.png</Datapath>
+            </PrecomputedEAvg>
+            <Roughness textureType='Constant'>
+                <Value>0.55 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-7.5 0 3</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>OuterMat</ObjectName>
+        <BsdfMaterial type='KullaContyMetal'>
+            <N>0.131 0.44715 1.4215</N>
+            <K>4.0624 2.4212 1.9342</K>
+            <PrecomputedE textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_E_LUT.png</Datapath>
+            </PrecomputedE>
+            <PrecomputedEAvg textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_Eavg_LUT.png</Datapath>
+            </PrecomputedEAvg>
+            <Roughness textureType='Constant'>
+                <Value>0.55 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-7.5 0 3</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <!-- Mori 1 -->
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>InnerMat</ObjectName>
+        <BsdfMaterial type='KullaContyMetal'>
+            <N>0.131 0.44715 1.4215</N>
+            <K>4.0624 2.4212 1.9342</K>
+            <PrecomputedE textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_E_LUT.png</Datapath>
+            </PrecomputedE>
+            <PrecomputedEAvg textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_Eavg_LUT.png</Datapath>
+            </PrecomputedEAvg>
+            <Roughness textureType='Constant'>
+                <Value>0.5 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-6 0 3</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>OuterMat</ObjectName>
+        <BsdfMaterial type='KullaContyMetal'>
+            <N>0.131 0.44715 1.4215</N>
+            <K>4.0624 2.4212 1.9342</K>
+            <PrecomputedE textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_E_LUT.png</Datapath>
+            </PrecomputedE>
+            <PrecomputedEAvg textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_Eavg_LUT.png</Datapath>
+            </PrecomputedEAvg>
+            <Roughness textureType='Constant'>
+                <Value>0.5 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-6 0 3</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <!-- Mori 1 -->
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>InnerMat</ObjectName>
+        <BsdfMaterial type='KullaContyMetal'>
+            <N>0.131 0.44715 1.4215</N>
+            <K>4.0624 2.4212 1.9342</K>
+            <PrecomputedE textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_E_LUT.png</Datapath>
+            </PrecomputedE>
+            <PrecomputedEAvg textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_Eavg_LUT.png</Datapath>
+            </PrecomputedEAvg>
+            <Roughness textureType='Constant'>
+                <Value>0.45 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-4.5 0 3</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>OuterMat</ObjectName>
+        <BsdfMaterial type='KullaContyMetal'>
+            <N>0.131 0.44715 1.4215</N>
+            <K>4.0624 2.4212 1.9342</K>
+            <PrecomputedE textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_E_LUT.png</Datapath>
+            </PrecomputedE>
+            <PrecomputedEAvg textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_Eavg_LUT.png</Datapath>
+            </PrecomputedEAvg>
+            <Roughness textureType='Constant'>
+                <Value>0.45 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-4.5 0 3</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <!-- Mori 1 -->
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>InnerMat</ObjectName>
+        <BsdfMaterial type='KullaContyMetal'>
+            <N>0.131 0.44715 1.4215</N>
+            <K>4.0624 2.4212 1.9342</K>
+            <PrecomputedE textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_E_LUT.png</Datapath>
+            </PrecomputedE>
+            <PrecomputedEAvg textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_Eavg_LUT.png</Datapath>
+            </PrecomputedEAvg>
+            <Roughness textureType='Constant'>
+                <Value>0.4 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-3 0 3</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>OuterMat</ObjectName>
+        <BsdfMaterial type='KullaContyMetal'>
+            <N>0.131 0.44715 1.4215</N>
+            <K>4.0624 2.4212 1.9342</K>
+            <PrecomputedE textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_E_LUT.png</Datapath>
+            </PrecomputedE>
+            <PrecomputedEAvg textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_Eavg_LUT.png</Datapath>
+            </PrecomputedEAvg>
+            <Roughness textureType='Constant'>
+                <Value>0.4 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-3 0 3</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <!-- Mori 1 -->
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>InnerMat</ObjectName>
+        <BsdfMaterial type='KullaContyMetal'>
+            <N>0.131 0.44715 1.4215</N>
+            <K>4.0624 2.4212 1.9342</K>
+            <PrecomputedE textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_E_LUT.png</Datapath>
+            </PrecomputedE>
+            <PrecomputedEAvg textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_Eavg_LUT.png</Datapath>
+            </PrecomputedEAvg>
+            <Roughness textureType='Constant'>
+                <Value>0.35 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-1.5 0 3</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>OuterMat</ObjectName>
+        <BsdfMaterial type='KullaContyMetal'>
+            <N>0.131 0.44715 1.4215</N>
+            <K>4.0624 2.4212 1.9342</K>
+            <PrecomputedE textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_E_LUT.png</Datapath>
+            </PrecomputedE>
+            <PrecomputedEAvg textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_Eavg_LUT.png</Datapath>
+            </PrecomputedEAvg>
+            <Roughness textureType='Constant'>
+                <Value>0.35 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-1.5 0 3</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <!-- Mori 1 -->
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>InnerMat</ObjectName>
+        <BsdfMaterial type='KullaContyMetal'>
+            <N>0.131 0.44715 1.4215</N>
+            <K>4.0624 2.4212 1.9342</K>
+            <PrecomputedE textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_E_LUT.png</Datapath>
+            </PrecomputedE>
+            <PrecomputedEAvg textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_Eavg_LUT.png</Datapath>
+            </PrecomputedEAvg>
+            <Roughness textureType='Constant'>
+                <Value>0.3 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-0 0 3</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>OuterMat</ObjectName>
+        <BsdfMaterial type='KullaContyMetal'>
+            <N>0.131 0.44715 1.4215</N>
+            <K>4.0624 2.4212 1.9342</K>
+            <PrecomputedE textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_E_LUT.png</Datapath>
+            </PrecomputedE>
+            <PrecomputedEAvg textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_Eavg_LUT.png</Datapath>
+            </PrecomputedEAvg>
+            <Roughness textureType='Constant'>
+                <Value>0.3 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>-0 0 3</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <!-- Mori 2 -->
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>InnerMat</ObjectName>
+        <BsdfMaterial type='KullaContyMetal'>
+            <N>0.131 0.44715 1.4215</N>
+            <K>4.0624 2.4212 1.9342</K>
+            <PrecomputedE textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_E_LUT.png</Datapath>
+            </PrecomputedE>
+            <PrecomputedEAvg textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_Eavg_LUT.png</Datapath>
+            </PrecomputedEAvg>
+            <Roughness textureType='Constant'>
+                <Value>0.25 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>1.5 0 3</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>OuterMat</ObjectName>
+        <BsdfMaterial type='KullaContyMetal'>
+            <N>0.131 0.44715 1.4215</N>
+            <K>4.0624 2.4212 1.9342</K>
+            <PrecomputedE textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_E_LUT.png</Datapath>
+            </PrecomputedE>
+            <PrecomputedEAvg textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_Eavg_LUT.png</Datapath>
+            </PrecomputedEAvg>
+            <Roughness textureType='Constant'>
+                <Value>0.25 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>1.5 0 3</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <!-- Mori 3 -->
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>InnerMat</ObjectName>
+        <BsdfMaterial type='KullaContyMetal'>
+            <N>0.131 0.44715 1.4215</N>
+            <K>4.0624 2.4212 1.9342</K>
+            <PrecomputedE textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_E_LUT.png</Datapath>
+            </PrecomputedE>
+            <PrecomputedEAvg textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_Eavg_LUT.png</Datapath>
+            </PrecomputedEAvg>
+            <Roughness textureType='Constant'>
+                <Value>0.2 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>3 0 3</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>OuterMat</ObjectName>
+        <BsdfMaterial type='KullaContyMetal'>
+            <N>0.131 0.44715 1.4215</N>
+            <K>4.0624 2.4212 1.9342</K>
+            <PrecomputedE textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_E_LUT.png</Datapath>
+            </PrecomputedE>
+            <PrecomputedEAvg textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_Eavg_LUT.png</Datapath>
+            </PrecomputedEAvg>
+            <Roughness textureType='Constant'>
+                <Value>0.2 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>3 0 3</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <!-- Mori 3 -->
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>InnerMat</ObjectName>
+        <BsdfMaterial type='KullaContyMetal'>
+            <N>0.131 0.44715 1.4215</N>
+            <K>4.0624 2.4212 1.9342</K>
+            <PrecomputedE textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_E_LUT.png</Datapath>
+            </PrecomputedE>
+            <PrecomputedEAvg textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_Eavg_LUT.png</Datapath>
+            </PrecomputedEAvg>
+            <Roughness textureType='Constant'>
+                <Value>0.15 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>4.5 0 3</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>OuterMat</ObjectName>
+        <BsdfMaterial type='KullaContyMetal'>
+            <N>0.131 0.44715 1.4215</N>
+            <K>4.0624 2.4212 1.9342</K>
+            <PrecomputedE textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_E_LUT.png</Datapath>
+            </PrecomputedE>
+            <PrecomputedEAvg textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_Eavg_LUT.png</Datapath>
+            </PrecomputedEAvg>
+            <Roughness textureType='Constant'>
+                <Value>0.15 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>4.5 0 3</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <!-- Mori 4 -->
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>InnerMat</ObjectName>
+        <BsdfMaterial type='KullaContyMetal'>
+            <N>0.131 0.44715 1.4215</N>
+            <K>4.0624 2.4212 1.9342</K>
+            <PrecomputedE textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_E_LUT.png</Datapath>
+            </PrecomputedE>
+            <PrecomputedEAvg textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_Eavg_LUT.png</Datapath>
+            </PrecomputedEAvg>
+            <Roughness textureType='Constant'>
+                <Value>0.1 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>6 0 3</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>OuterMat</ObjectName>
+        <BsdfMaterial type='KullaContyMetal'>
+            <N>0.131 0.44715 1.4215</N>
+            <K>4.0624 2.4212 1.9342</K>
+            <PrecomputedE textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_E_LUT.png</Datapath>
+            </PrecomputedE>
+            <PrecomputedEAvg textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_Eavg_LUT.png</Datapath>
+            </PrecomputedEAvg>
+            <Roughness textureType='Constant'>
+                <Value>0.1 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>6 0 3</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <!-- Mori 5 -->
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>InnerMat</ObjectName>
+        <BsdfMaterial type='KullaContyMetal'>
+            <N>0.131 0.44715 1.4215</N>
+            <K>4.0624 2.4212 1.9342</K>
+            <PrecomputedE textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_E_LUT.png</Datapath>
+            </PrecomputedE>
+            <PrecomputedEAvg textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_Eavg_LUT.png</Datapath>
+            </PrecomputedEAvg>
+            <Roughness textureType='Constant'>
+                <Value>0.05 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>7.5 0 3</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+    <Object type='Mesh'>
+        <Datapath>../asset/models/mori/testObj.obj</Datapath>
+        <ObjectName>OuterMat</ObjectName>
+        <BsdfMaterial type='KullaContyMetal'>
+            <N>0.131 0.44715 1.4215</N>
+            <K>4.0624 2.4212 1.9342</K>
+            <PrecomputedE textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_E_LUT.png</Datapath>
+            </PrecomputedE>
+            <PrecomputedEAvg textureType='Image'>
+                <Datapath>../asset/precomputed/GGX_Eavg_LUT.png</Datapath>
+            </PrecomputedEAvg>
+            <Roughness textureType='Constant'>
+                <Value>0.05 0 0</Value>
+            </Roughness>
+        </BsdfMaterial>
+        <Transformation>
+            <Translation>7.5 0 3</Translation>
+            <Rotation>0 20 0</Rotation>
+        </Transformation>
+    </Object>
+
+
+    <Light type='DiffuseArealight'>
+        <Flux>500 500 500</Flux>
+        <Object type='Mesh'>
+            <Datapath>../asset/models/mori/testObj.obj</Datapath>
+            <ObjectName>Material</ObjectName>
+        </Object>
+    </Light>
+
+</Scene>

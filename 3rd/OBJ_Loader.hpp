@@ -11,6 +11,7 @@
 #include <string>
 #include <fstream>
 #include <math.h>
+#include <cctype>
 
 // Print progress to console while loading (large models)
 // #define OBJL_CONSOLE_OUTPUT
@@ -460,6 +461,7 @@ namespace objl
             std::string curline;
             while (std::getline(file, curline))
             {
+
 #ifdef OBJL_CONSOLE_OUTPUT
                 if ((outputIndicator = ((outputIndicator + 1) % outputEveryNth)) == 1)
                 {

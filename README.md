@@ -2,7 +2,13 @@
 
 > This project is modified based on [Glue](https://github.com/isikmustafa/glue).
 
-## result
+## spot light
+
+- xml load a obj file contains multi objects
+
+- cloth material
+
+## Gallery
 
 > spp 1024
 

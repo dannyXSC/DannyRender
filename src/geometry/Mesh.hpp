@@ -8,6 +8,7 @@
 #include <geometry/Transformation.hpp>
 #include <geometry/BVH.h>
 #include <core/Discrete1dSampler.h>
+#include <light/Light.h>
 
 namespace danny
 {
@@ -20,6 +21,7 @@ namespace danny
             struct Xml : public Object::Xml
             {
                 std::string datapath;
+                std::string object_name;
                 Transformation::Xml transformation;
                 std::unique_ptr<material::BsdfMaterial::Xml> bsdf_material;
 
@@ -30,8 +32,8 @@ namespace danny
 
         public:
             explicit Mesh(const Mesh::Xml &xml)
-                : Mesh(xml.datapath, xml.bsdf_material ? xml.bsdf_material->create() : nullptr, xml.transformation.info){};
-            explicit Mesh(const std::string path_bvh, std::shared_ptr<material::BsdfMaterial> m, const Transformation::Info &t = Transformation::Info());
+                : Mesh(xml.datapath, xml.object_name, xml.bsdf_material ? xml.bsdf_material->create() : nullptr, xml.transformation.info){};
+            explicit Mesh(const std::string path_bvh, const std::string object_name, std::shared_ptr<material::BsdfMaterial> m, const Transformation::Info &t = Transformation::Info());
             explicit Mesh(std::shared_ptr<BVH<Triangle>> bvh, std::shared_ptr<material::BsdfMaterial> m, const Transformation::Info &t = Transformation::Info());
 
             Plane sample(std::shared_ptr<core::UniformSampler> sampler) const override;

@@ -2,6 +2,7 @@
 
 #include "ConstantTexture.h"
 #include "IntervalTexture.h"
+#include "ImageTexture.h"
 
 namespace danny
 {
@@ -18,6 +19,10 @@ namespace danny
             else if (texture_type == std::string("Interval"))
             {
                 return std::make_unique<IntervalTexture::Xml>(node);
+            }
+            else if (texture_type == std::string("Image"))
+            {
+                return std::make_unique<ImageTexture::Xml>(node);
             }
             else
             {

@@ -3,6 +3,7 @@
 #include "Diffuse.hpp"
 #include "Metal.h"
 #include "Cloth.h"
+#include "KullaContyMetal.h"
 
 namespace danny
 {
@@ -19,6 +20,10 @@ namespace danny
             else if (bsdf_type == std::string("Metal"))
             {
                 return std::make_unique<material::Metal::Xml>(node);
+            }
+            else if (bsdf_type == std::string("KullaContyMetal"))
+            {
+                return std::make_unique<material::KullaContyMetal::Xml>(node);
             }
             else if (bsdf_type == std::string("Cloth"))
             {
